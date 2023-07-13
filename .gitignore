@@ -10,6 +10,7 @@
 .idea/
 /.gradle/
 *.iml
+.DS_Store
 .scannerwork
 user.properties
 /cflint-result.html
