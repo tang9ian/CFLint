@@ -43,19 +43,19 @@ public class BugInfo implements Comparable<BugInfo> {
     public void setOffset(final int position) {
         this.offset = position;
     }
-    
+
     public int getOffset() {
         return this.offset;
     }
-    
+
     public void setLength(final int position) {
         this.length = position;
     }
-    
+
     public int getLength() {
         return this.length;
     }
-    
+
     public String getMessage() {
         return message;
     }
@@ -165,15 +165,16 @@ public class BugInfo implements Comparable<BugInfo> {
             int elemoffset = 0;
             int length = 0;
             if (elem != null) {
-                elemoffset = elem.getName().equalsIgnoreCase(CF.CFSCRIPT) ? elem.getStartTag().getEnd() : elem.getBegin();
+                elemoffset = elem.getName().equalsIgnoreCase(CF.CFSCRIPT) ? elem.getStartTag().getEnd()
+                        : elem.getBegin();
                 elemLine = elem.getSource().getRow(elem.getBegin());
                 elemColumn = elem.getSource().getColumn(elem.getBegin());
             }
             int offset = elemoffset + Math.max(expression == null ? 0 : expression.getOffset(), 0);
-            if(expression == null) {
+            if (expression == null) {
                 length = 0;
             } else {
-                if(expression.getToken() != null ) {
+                if (expression.getToken() != null) {
                     length = expression.getToken().getStopIndex() - expression.getToken().getStartIndex() + 1;
                 } else {
                     length = expression.Decompile(0).length();
@@ -181,7 +182,7 @@ public class BugInfo implements Comparable<BugInfo> {
             }
             bugInfo.setOffset(offset);
             bugInfo.setLength(length);
-            final int lineOffSet = elem==null?1:0;
+            final int lineOffSet = elem == null ? 1 : 0;
             bugInfo.setLine(elemLine + Math.max(expression == null ? 0 : expression.getLine() - lineOffSet, 0));
             bugInfo.setColumn(elemColumn + Math.max(expression == null ? 0 : expression.getColumn() - 1, 0));
             doMessageText(elem);
@@ -194,15 +195,16 @@ public class BugInfo implements Comparable<BugInfo> {
             int elemoffset = 0;
             int length = 0;
             if (elem != null) {
-                elemoffset = elem.getName().equalsIgnoreCase(CF.CFSCRIPT) ? elem.getStartTag().getEnd() : elem.getBegin();
+                elemoffset = elem.getName().equalsIgnoreCase(CF.CFSCRIPT) ? elem.getStartTag().getEnd()
+                        : elem.getBegin();
                 elemLine = elem.getSource().getRow(elem.getBegin());
                 elemColumn = elem.getSource().getColumn(elem.getBegin());
             }
             int offset = elemoffset + Math.max(expression == null ? 0 : expression.getOffset(), 0);
-            if(expression == null) {
+            if (expression == null) {
                 length = 0;
             } else {
-                if(expression.getToken() != null ) {
+                if (expression.getToken() != null) {
                     length = expression.getToken().getStopIndex() - expression.getToken().getStartIndex() + 1;
                 } else {
                     length = expression.Decompile(0).length();
@@ -261,8 +263,9 @@ public class BugInfo implements Comparable<BugInfo> {
 
     @Override
     public String toString() {
-        return "BugInfo [filename=" + filename + ", offset=" + offset + ", length="  + length + ", line=" + line + ", column=" + column + ", message=" + message
-            + ", messageCode=" + messageCode + ", expression=" + expression + "]";
+        return "BugInfo [filename=" + filename + ", offset=" + offset + ", length=" + length + ", line=" + line
+                + ", column=" + column + ", message=" + message + ", messageCode=" + messageCode + ", expression="
+                + expression + "]";
     }
 
     public String getExpression() {

@@ -44,7 +44,8 @@ public class TextOutput {
 
         for (final Levels severity : Levels.values()) {
             if (counts.getSeverity(severity) > 0) {
-                sb.append(NEW_LINE).append("Total " + severity.toString().toLowerCase() + "s:" + counts.getSeverity(severity));
+                sb.append(NEW_LINE)
+                        .append("Total " + severity.toString().toLowerCase() + "s:" + counts.getSeverity(severity));
             }
         }
 

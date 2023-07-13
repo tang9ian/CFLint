@@ -18,7 +18,7 @@ public class TestCFLint2Files {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigBuilder configBuilder = new ConfigBuilder().include("ARG_DEFAULT_MISSING","QUERYPARAM_REQ");
+        final ConfigBuilder configBuilder = new ConfigBuilder().include("ARG_DEFAULT_MISSING", "QUERYPARAM_REQ");
         cfBugs = new CFLintAPI(configBuilder.build());
     }
 

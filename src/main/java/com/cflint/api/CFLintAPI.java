@@ -23,12 +23,13 @@ import com.cflint.exception.CFLintScanException;
 import com.cflint.tools.CFLintFilter;
 
 /**
- * Provides a public API for integrating CFLint directly into another JVM environment.
+ * Provides a public API for integrating CFLint directly into another JVM
+ * environment.
  *
  */
 public class CFLintAPI {
 
-    PrintStream printStreamOut =  System.out;
+    PrintStream printStreamOut = System.out;
     PrintStream printStreamErr = System.err;
     final CFLintPluginInfo pluginInfo = ConfigUtils.loadDefaultPluginInfo();
 
@@ -39,14 +40,14 @@ public class CFLintAPI {
     boolean debug = false;
 
     /**
-     * List of file extensions to scan.  Default to *.cfc and *.cfm
+     * List of file extensions to scan. Default to *.cfc and *.cfm
      */
-    private List<String> extensions = new ArrayList<>(Arrays.asList("cfc","cfm"));
-    
+    private List<String> extensions = new ArrayList<>(Arrays.asList("cfc", "cfm"));
+
     private boolean strictInclude;
     private String environmentName;
 
-	final CFLintConfiguration configuration;
+    final CFLintConfiguration configuration;
     final CFLint cflint;
 
     public CFLintAPI(final CFLintConfiguration configuration) throws CFLintConfigurationException {
@@ -58,7 +59,6 @@ public class CFLintAPI {
     public CFLintAPI() throws CFLintConfigurationException {
         this(new ConfigBuilder().build());
     }
-
 
     public CFLintResult scan(final List<String> fileOrFolder) throws CFLintScanException, CFLintConfigurationException {
 
@@ -75,8 +75,7 @@ public class CFLintAPI {
         return scan(source, "source.cfc");
     }
 
-    public CFLintResult scan(final String source, final String filename)
-            throws CFLintScanException {
+    public CFLintResult scan(final String source, final String filename) throws CFLintScanException {
         final File starterFile = new File(filename);
         if (starterFile.exists() && starterFile.getParentFile().exists()) {
             cflint.setupConfigAncestry(starterFile.getParentFile());
@@ -102,7 +101,7 @@ public class CFLintAPI {
             cflint.setStrictIncludes(strictInclude);
             cflint.setEnvironmentName(environmentName);
             cflint.setAllowedExtensions(extensions);
-            if(filterFile!=null){
+            if (filterFile != null) {
                 cflint.getBugs().setFilter(createFilter());
             }
             return cflint;
@@ -132,7 +131,7 @@ public class CFLintAPI {
     /**
      * Return the current version of CFLint
      *
-     * @return  the current version of CFLint
+     * @return the current version of CFLint
      */
     public String getVersion() {
         return Version.getVersion();
@@ -141,7 +140,7 @@ public class CFLintAPI {
     /**
      * Return the version of CFParser used by the current CFLint
      *
-     * @return  the version of CFParser used by this version of CFLint
+     * @return the version of CFParser used by this version of CFLint
      */
     public String getCFParserVersion() {
         return cfml.parsing.Version.getVersion();
@@ -150,7 +149,7 @@ public class CFLintAPI {
     /**
      * List the rule groups
      *
-     * @return  the list of rule groups
+     * @return the list of rule groups
      */
     public List<RuleGroup> getRuleGroups() {
         return pluginInfo.getRuleGroups();
@@ -159,7 +158,7 @@ public class CFLintAPI {
     /**
      * Limit file extensions to this list
      *
-     * @param extensions        list of allowed extensions
+     * @param extensions list of allowed extensions
      */
     public void setExtensions(final List<String> extensions) {
         this.extensions = extensions;
@@ -168,11 +167,11 @@ public class CFLintAPI {
     /**
      * Verbose output
      *
-     * @param verbose   verbose output
+     * @param verbose verbose output
      */
     public void setVerbose(final boolean verbose) {
         this.verbose = verbose;
-        if(cflint != null) {
+        if (cflint != null) {
             cflint.setVerbose(verbose);
         }
     }
@@ -180,11 +179,11 @@ public class CFLintAPI {
     /**
      * Log errors to standard error.
      *
-     * @param logError  log errors to standard error
+     * @param logError log errors to standard error
      */
     public void setLogError(final boolean logError) {
         this.logError = logError;
-        if(cflint != null) {
+        if (cflint != null) {
             cflint.setLogError(logError);
         }
     }
@@ -192,11 +191,11 @@ public class CFLintAPI {
     /**
      * Run quietly
      *
-     * @param quiet     run quietly
+     * @param quiet run quietly
      */
     public void setQuiet(final boolean quiet) {
         this.quiet = quiet;
-        if(cflint != null) {
+        if (cflint != null) {
             cflint.setQuiet(quiet);
         }
     }
@@ -204,20 +203,19 @@ public class CFLintAPI {
     /**
      * Run in debug mode
      *
-     * @param debug     run quietly
+     * @param debug run quietly
      */
     public void setDebug(final boolean debug) {
         this.debug = debug;
-        if(cflint != null) {
+        if (cflint != null) {
             cflint.setDebug(debug);
         }
     }
 
     /**
-     * Follow include paths and report an error if the included file cannot be
-     * found
+     * Follow include paths and report an error if the included file cannot be found
      *
-     * @param strictInclude     strict include
+     * @param strictInclude strict include
      */
     public void setStrictInclude(final boolean strictInclude) {
         this.strictInclude = strictInclude;
@@ -226,7 +224,7 @@ public class CFLintAPI {
     /**
      * Get the configuration object used by the API
      *
-     * @return  the configuration object
+     * @return the configuration object
      */
     public CFLintConfiguration getConfiguration() {
         return configuration;
@@ -235,33 +233,31 @@ public class CFLintAPI {
     /**
      * Set filter file
      *
-     * @param filterFile        filter file
+     * @param filterFile filter file
      */
     public void setFilterFile(final String filterFile) {
         this.filterFile = filterFile;
     }
 
     /**
-     * Provide the stream to use for standard output, by default System.out is
-     * used.
+     * Provide the stream to use for standard output, by default System.out is used.
      *
-     * @param printStreamOut    standard out stream
+     * @param printStreamOut standard out stream
      */
     public void setPrintStreamOut(final PrintStream printStreamOut) {
         this.printStreamOut = printStreamOut;
     }
 
     /**
-     * Provide the stream to use for error output, by default System.err is
-     * used.
+     * Provide the stream to use for error output, by default System.err is used.
      *
-     * @param printStreamErr    standard error stream
+     * @param printStreamErr standard error stream
      */
     public void setPrintStreamErr(final PrintStream printStreamErr) {
         this.printStreamErr = printStreamErr;
     }
 
     public void setEnvironmentName(String environmentName) {
-		this.environmentName = environmentName;
-	}
+        this.environmentName = environmentName;
+    }
 }

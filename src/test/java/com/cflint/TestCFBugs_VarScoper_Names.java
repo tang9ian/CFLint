@@ -66,7 +66,8 @@ public class TestCFBugs_VarScoper_Names {
         runTagAttrTestVard(tagName, "Name", "xx");
     }
 
-    public void runTagAttrTest(final String tag, final String attr, final String variable) throws CFLintScanException, CFLintConfigurationException {
+    public void runTagAttrTest(final String tag, final String attr, final String variable)
+            throws CFLintScanException, CFLintConfigurationException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n" + "   <" + tag + " " + attr + "=\""
                 + variable + "\">\r\n" + "</" + tag + ">\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");

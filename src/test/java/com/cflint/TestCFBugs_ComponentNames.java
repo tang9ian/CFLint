@@ -19,7 +19,9 @@ public class TestCFBugs_ComponentNames {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigBuilder configBuilder = new ConfigBuilder().include("COMPONENT_INVALID_NAME","COMPONENT_ALLCAPS_NAME","COMPONENT_TOO_SHORT","COMPONENT_TOO_LONG","COMPONENT_TOO_WORDY","COMPONENT_IS_TEMPORARY","COMPONENT_HAS_PREFIX_OR_POSTFIX");
+        final ConfigBuilder configBuilder = new ConfigBuilder().include("COMPONENT_INVALID_NAME",
+                "COMPONENT_ALLCAPS_NAME", "COMPONENT_TOO_SHORT", "COMPONENT_TOO_LONG", "COMPONENT_TOO_WORDY",
+                "COMPONENT_IS_TEMPORARY", "COMPONENT_HAS_PREFIX_OR_POSTFIX");
         cfBugs = new CFLintAPI(configBuilder.build());
     }
 

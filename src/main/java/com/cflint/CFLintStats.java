@@ -24,7 +24,8 @@ public class CFLintStats {
         this.totalLines = totalLines;
     }
 
-    public CFLintStats(final long timestamp, final long fileCount, final BigInteger totalLines, final BugCounts counts) {
+    public CFLintStats(final long timestamp, final long fileCount, final BigInteger totalLines,
+            final BugCounts counts) {
         super();
         this.timestamp = timestamp;
         this.fileCount = fileCount;

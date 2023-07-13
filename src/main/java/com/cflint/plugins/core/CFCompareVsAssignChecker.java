@@ -15,10 +15,10 @@ import ro.fortsoft.pf4j.Extension;
 
 @Extension
 public class CFCompareVsAssignChecker extends CFLintScannerAdapter {
-    private static final List<Integer> TOKENS = Arrays.asList(CFSCRIPTLexer.EQUALSEQUALSOP, CFSCRIPTLexer.LT, CFSCRIPTLexer.LTE,
-            CFSCRIPTLexer.GT, CFSCRIPTLexer.GTE, CFSCRIPTLexer.OR, CFSCRIPTLexer.OROPERATOR, CFSCRIPTLexer.EQV,
-            CFSCRIPTLexer.XOR, CFSCRIPTLexer.AND, CFSCRIPTLexer.ANDOPERATOR, CFSCRIPTLexer.EQ, CFSCRIPTLexer.NEQ,
-            CFSCRIPTLexer.CONTAINS);
+    private static final List<Integer> TOKENS = Arrays.asList(CFSCRIPTLexer.EQUALSEQUALSOP, CFSCRIPTLexer.LT,
+            CFSCRIPTLexer.LTE, CFSCRIPTLexer.GT, CFSCRIPTLexer.GTE, CFSCRIPTLexer.OR, CFSCRIPTLexer.OROPERATOR,
+            CFSCRIPTLexer.EQV, CFSCRIPTLexer.XOR, CFSCRIPTLexer.AND, CFSCRIPTLexer.ANDOPERATOR, CFSCRIPTLexer.EQ,
+            CFSCRIPTLexer.NEQ, CFSCRIPTLexer.CONTAINS);
 
     @Override
     public void expression(final CFScriptStatement expression, final Context context, final BugList bugs) {

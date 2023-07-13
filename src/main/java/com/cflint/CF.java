@@ -384,7 +384,6 @@ public class CF {
      */
     public static final String TYPE = "type";
 
-
     /**
      * CF scope application.
      */
@@ -393,12 +392,12 @@ public class CF {
     /**
      * CF scope application.
      */
-    public static final String FLASH= "flash";
+    public static final String FLASH = "flash";
 
     /**
      * CF scope attributes.
      */
-    public static final String ATTRIBUTES= "attributes";
+    public static final String ATTRIBUTES = "attributes";
 
     /**
      * CF scope cgi.
@@ -428,7 +427,7 @@ public class CF {
     /**
      * CF scope thread.
      */
-    public static final String THREAD= "thread";
+    public static final String THREAD = "thread";
 
     /**
      * CF scope session.
@@ -453,7 +452,7 @@ public class CF {
     /**
      * CF scope cthread.
      */
-    public static final String CFTHREAD= "cfthread";
+    public static final String CFTHREAD = "cfthread";
 
     /**
      * CF scope variables.
@@ -486,6 +485,6 @@ public class CF {
     public static final String URL = "url";
 
     private CF() {
-      throw new IllegalStateException("CF utility class");
+        throw new IllegalStateException("CF utility class");
     }
 }

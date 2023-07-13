@@ -21,13 +21,13 @@ public interface CFLintConfiguration {
     void addExclude(PluginMessage pluginMessage);
 
     Collection<CFLintPluginInfo.PluginInfoRule> getRules();
-    
+
     /**
-     * get the property from the configuration.
-     * This can be overriden with -DcheckerClass.propertyname=value
+     * get the property from the configuration. This can be overriden with
+     * -DcheckerClass.propertyname=value
      *
-     * @param name      the name of the parameter
-     * @return          the value of the parameter
+     * @param name the name of the parameter
+     * @return the value of the parameter
      */
     public String getParameter(CFLintScanner linter, final String name);
 

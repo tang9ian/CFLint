@@ -1,9 +1,9 @@
 package com.cflint;
 
 /**
- * tests from 
+ * tests from
  * https://github.com/mschierberl/varscoper/blob/master/varScoper.cfc
- * 
+ *
  */
 import static org.junit.Assert.assertEquals;
 
@@ -128,12 +128,11 @@ public class TestCFBugs_VarScoper {
     }
 
     @Test
-    public void queryNameOffset()
-            throws CFLintScanException {
-        final String cfcSrc = "<cfcomponent>\n<cffunction name=\"foo\">\n<cfset var fooQry=\"\"/>\n" + 
-                "<CFquery name=\"users\" datasource=\"dsn\">\n  SELECT user\n FROM users\n" + 
-                "  where user_id = <CFqueryparam value=\"#user_id#\" cfsqltype=\"CF_SQL_NUMERIC\">\n" + 
-                "</CFquery>\n</cffunction>\n</cfcomponent>";
+    public void queryNameOffset() throws CFLintScanException {
+        final String cfcSrc = "<cfcomponent>\n<cffunction name=\"foo\">\n<cfset var fooQry=\"\"/>\n"
+                + "<CFquery name=\"users\" datasource=\"dsn\">\n  SELECT user\n FROM users\n"
+                + "  where user_id = <CFqueryparam value=\"#user_id#\" cfsqltype=\"CF_SQL_NUMERIC\">\n"
+                + "</CFquery>\n</cffunction>\n</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         List<BugInfo> list = lintresult.getIssues().get("MISSING_VAR");
         assertEquals(1, lintresult.getIssues().size());
@@ -143,7 +142,8 @@ public class TestCFBugs_VarScoper {
 
     @Test
     public void testVarScoperCharOffset() throws CFLintScanException {
-    	String src = "<cfscript>component {\r\n" + "public any function process(){\r\n" + "   x=123;\r\n" + "}\r\n" + "}</cfscript>";
+        String src = "<cfscript>component {\r\n" + "public any function process(){\r\n" + "   x=123;\r\n" + "}\r\n"
+                + "}</cfscript>";
         CFLintResult lintresult = cfBugs.scan(src, "test");
         List<BugInfo> list = lintresult.getIssues().get("MISSING_VAR");
         assertEquals(1, list.size());
@@ -157,12 +157,8 @@ public class TestCFBugs_VarScoper {
 
     @Test
     public void testVarScoperVarOffset() throws CFLintScanException {
-        String src = "component{\n" + 
-                "    function test() {\n" + 
-                "        name1 = 1;\n" + 
-                "        name2 = \"Smith\";\n" + 
-                "    }\n" + 
-                "}";
+        String src = "component{\n" + "    function test() {\n" + "        name1 = 1;\n"
+                + "        name2 = \"Smith\";\n" + "    }\n" + "}";
         CFLintResult lintresult = cfBugs.scan(src, "test");
         List<BugInfo> list = lintresult.getIssues().get("MISSING_VAR");
         assertEquals(2, list.size());

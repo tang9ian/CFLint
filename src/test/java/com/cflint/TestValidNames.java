@@ -19,15 +19,15 @@ public class TestValidNames {
 
     @Test
     public void testInvalid() {
-        assertFalse(name.isInvalid("camelCase","CamelCase"));
-        assertFalse(name.isInvalid("product_id","CamelCase"));
-        assertFalse(name.isInvalid("size","CamelCase"));
-        assertFalse(name.isInvalid("lowercase","CamelCase"));
-        assertFalse(name.isInvalid("UPPERCASE","CamelCase"));
-        assertFalse(name.isInvalid("99_bottles_of_beer","CamelCase"));
+        assertFalse(name.isInvalid("camelCase", "CamelCase"));
+        assertFalse(name.isInvalid("product_id", "CamelCase"));
+        assertFalse(name.isInvalid("size", "CamelCase"));
+        assertFalse(name.isInvalid("lowercase", "CamelCase"));
+        assertFalse(name.isInvalid("UPPERCASE", "CamelCase"));
+        assertFalse(name.isInvalid("99_bottles_of_beer", "CamelCase"));
 
-        assertTrue(name.isInvalid("UppperCaseCamel","CamelCase"));
-        assertFalse(name.isInvalid("endsInNumber99","CamelCase"));
+        assertTrue(name.isInvalid("UppperCaseCamel", "CamelCase"));
+        assertFalse(name.isInvalid("endsInNumber99", "CamelCase"));
     }
 
     @Test

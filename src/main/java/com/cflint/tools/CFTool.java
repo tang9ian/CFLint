@@ -18,9 +18,9 @@ public class CFTool {
     }
 
     public static Element getNamedParent(final Element elem, final String tagName) {
-    	Element parentElem = elem.getParentElement();
+        Element parentElem = elem.getParentElement();
         while (parentElem != null && !parentElem.getName().equals(tagName)) {
-        	parentElem = parentElem.getParentElement();
+            parentElem = parentElem.getParentElement();
         }
         return parentElem;
     }

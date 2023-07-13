@@ -18,7 +18,7 @@ public class TestCFBugs_FunctionType {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigBuilder configBuilder = new ConfigBuilder().include("FUNCTION_TYPE_MISSING","FUNCTION_TYPE_ANY");
+        final ConfigBuilder configBuilder = new ConfigBuilder().include("FUNCTION_TYPE_MISSING", "FUNCTION_TYPE_ANY");
         cfBugs = new CFLintAPI(configBuilder.build());
     }
 

@@ -7,7 +7,7 @@ import com.cflint.config.CFLintPluginInfo.PluginInfoRule;
 import com.cflint.config.CFLintPluginInfo.PluginInfoRule.PluginMessage;
 import com.cflint.plugins.CFLintScanner;
 
-public class CFLintChainedConfig extends BaseConfig{
+public class CFLintChainedConfig extends BaseConfig {
 
     private final CFLintConfig config;
     private final CFLintConfiguration parent;
@@ -26,9 +26,9 @@ public class CFLintChainedConfig extends BaseConfig{
 
     /**
      * Create a nested configuration.
-     * 
-     * @param config    Configuration to merge
-     * @return          Combined configuration
+     *
+     * @param config Configuration to merge
+     * @return Combined configuration
      */
     public CFLintChainedConfig createNestedConfig(final CFLintConfiguration config) {
         return config == null ? this : new CFLintChainedConfig(config, this);
@@ -47,7 +47,7 @@ public class CFLintChainedConfig extends BaseConfig{
     }
 
     /**
-     * 
+     *
      * @return the parent configuration
      */
     public CFLintConfiguration getParent() {
@@ -98,6 +98,7 @@ public class CFLintChainedConfig extends BaseConfig{
 
     /**
      * List all the rules.
+     *
      * @return the list of rules
      */
     public Collection<PluginInfoRule> getAllRules() {
@@ -115,11 +116,11 @@ public class CFLintChainedConfig extends BaseConfig{
         return retval;
 
     }
-    
+
     @Override
     public Object getParameter(final String name) {
         final Object retval = config.getParameter(name);
-        if(retval !=null || parent == null){
+        if (retval != null || parent == null) {
             return retval;
         }
         return parent.getParameter(name);

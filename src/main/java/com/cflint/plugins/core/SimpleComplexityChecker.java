@@ -1,7 +1,7 @@
 package com.cflint.plugins.core;
 
-import com.cflint.CF;
 import com.cflint.BugList;
+import com.cflint.CF;
 import com.cflint.plugins.CFLintScannerAdapter;
 import com.cflint.plugins.Context;
 
@@ -44,13 +44,14 @@ public class SimpleComplexityChecker extends CFLintScannerAdapter {
                 alreadyTooComplex = false;
             }
             // Not using instanceof to avoid double counting
-            else if (expression.getClass().equals(CFIfStatement.class) || expression.getClass().equals(CFForStatement.class)
-                || expression.getClass().equals(CFForInStatement.class)
-                || expression.getClass().equals(CFSwitchStatement.class)
-                || expression.getClass().equals(CFTryCatchStatement.class)
-                || expression.getClass().equals(CFWhileStatement.class)
-                || expression.getClass().equals(CFCase.class)
-                || expression.getClass().equals(CFDoWhileStatement.class)) {
+            else if (expression.getClass().equals(CFIfStatement.class)
+                    || expression.getClass().equals(CFForStatement.class)
+                    || expression.getClass().equals(CFForInStatement.class)
+                    || expression.getClass().equals(CFSwitchStatement.class)
+                    || expression.getClass().equals(CFTryCatchStatement.class)
+                    || expression.getClass().equals(CFWhileStatement.class)
+                    || expression.getClass().equals(CFCase.class)
+                    || expression.getClass().equals(CFDoWhileStatement.class)) {
                 complexity++;
                 checkComplexity(context.getFunctionName(), functionLineNo, functionOffset, context, bugs);
             }
@@ -68,19 +69,20 @@ public class SimpleComplexityChecker extends CFLintScannerAdapter {
             alreadyTooComplex = false;
         } else {
             if (name.equalsIgnoreCase(CF.CFIF) || name.equalsIgnoreCase(CF.CFELSE) || name.equalsIgnoreCase(CF.CFELSEIF)
-                || name.equalsIgnoreCase(CF.CFLOOP) || name.equalsIgnoreCase(CF.CFWHILE)
-                || name.equalsIgnoreCase(CF.CFOUTPUT) // TODO could check for
-                // query=
-                || name.equalsIgnoreCase(CF.CFCASE) || name.equalsIgnoreCase(CF.CFDEFAULTCASE)
-                || name.equalsIgnoreCase(CF.CFTRY) || name.equalsIgnoreCase(CF.CFCATCH)) {
+                    || name.equalsIgnoreCase(CF.CFLOOP) || name.equalsIgnoreCase(CF.CFWHILE)
+                    || name.equalsIgnoreCase(CF.CFOUTPUT) // TODO could check for
+                    // query=
+                    || name.equalsIgnoreCase(CF.CFCASE) || name.equalsIgnoreCase(CF.CFDEFAULTCASE)
+                    || name.equalsIgnoreCase(CF.CFTRY) || name.equalsIgnoreCase(CF.CFCATCH)) {
                 complexity++;
                 checkComplexity(context.getFunctionName(), functionLineNo, functionOffset, context, bugs);
             }
         }
     }
 
-    protected void checkComplexity(final String name, final int lineNo, final int offset, final Context context, final BugList bugs) {
-        final String complexityThreshold = context.getConfiguration().getParameter(this,"maximum");
+    protected void checkComplexity(final String name, final int lineNo, final int offset, final Context context,
+            final BugList bugs) {
+        final String complexityThreshold = context.getConfiguration().getParameter(this, "maximum");
         int threshold = COMPLEXITY_THRESHOLD;
 
         if (complexityThreshold != null) {

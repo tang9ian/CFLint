@@ -48,7 +48,7 @@ public class TestCFLintConfig {
     @Test
     /**
      * Test the round trip of the config json file including rule groups.
-     * 
+     *
      * @throws JsonGenerationException
      * @throws JsonMappingException
      * @throws IOException

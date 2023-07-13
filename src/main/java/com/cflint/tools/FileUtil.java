@@ -12,7 +12,7 @@ import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.input.BOMInputStream;
 
 public class FileUtil {
-    
+
     private static final String DEFAULT_ENCODING = "UTF-8";
     private static final int BUF_SIZE = 8192;
 
@@ -36,7 +36,8 @@ public class FileUtil {
                 if (fis != null) {
                     fis.close();
                 }
-            } catch (final IOException e) {}
+            } catch (final IOException e) {
+            }
         }
     }
 
@@ -51,11 +52,11 @@ public class FileUtil {
 
     /**
      * Read from reader till EOF.
+     *
      * @param rdr the reader from which to read.
      * @return the contents read out of the given reader.
      *
-     * @throws IOException if the contents could not be read out from the
-     *         reader.
+     * @throws IOException if the contents could not be read out from the reader.
      */
     public static final String readFully(final Reader rdr) throws IOException {
         return readFully(rdr, BUF_SIZE);
@@ -64,19 +65,16 @@ public class FileUtil {
     /**
      * Read from reader till EOF.
      *
-     * @param rdr the reader from which to read.
+     * @param rdr        the reader from which to read.
      * @param bufferSize the buffer size to use when reading.
      *
      * @return the contents read out of the given reader.
      *
-     * @throws IOException if the contents could not be read out from the
-     *         reader.
+     * @throws IOException if the contents could not be read out from the reader.
      */
-    public static final String readFully(final Reader rdr, int bufferSize)
-        throws IOException {
+    public static final String readFully(final Reader rdr, int bufferSize) throws IOException {
         if (bufferSize <= 0) {
-            throw new IllegalArgumentException("Buffer size must be greater "
-                                               + "than 0");
+            throw new IllegalArgumentException("Buffer size must be greater " + "than 0");
         }
         final char[] buffer = new char[bufferSize];
         int bufferLength = 0;

@@ -7,7 +7,13 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.cflint.*;
+import com.cflint.BugCounts;
+import com.cflint.BugInfo;
+import com.cflint.BugList;
+import com.cflint.Bugs;
+import com.cflint.CFLintStats;
+import com.cflint.Levels;
+import com.cflint.Version;
 import com.cflint.xml.CFLintResultMarshaller;
 import com.cflint.xml.MarshallerException;
 
@@ -34,7 +40,8 @@ public class DefaultCFlintResultMarshaller implements CFLintResultMarshaller {
         }
     }
 
-    private void writeIssues(final BugList bugList, final XMLStreamWriter xtw, final CFLintStats stats) throws XMLStreamException {
+    private void writeIssues(final BugList bugList, final XMLStreamWriter xtw, final CFLintStats stats)
+            throws XMLStreamException {
         xtw.writeStartElement("issues");
         xtw.writeAttribute("version", Version.getVersion());
         xtw.writeAttribute("timestamp", Long.toString(stats.getTimestamp()));
@@ -50,7 +57,8 @@ public class DefaultCFlintResultMarshaller implements CFLintResultMarshaller {
         xtw.writeEndElement();
     }
 
-    private void writeCounts(final XMLStreamWriter xtw, final BugCounts counts, final CFLintStats stats) throws XMLStreamException {
+    private void writeCounts(final XMLStreamWriter xtw, final BugCounts counts, final CFLintStats stats)
+            throws XMLStreamException {
         xtw.writeStartElement("counts");
         xtw.writeAttribute("totalfiles", Long.toString(stats.getFileCount()));
         xtw.writeAttribute("totallines", stats.getTotalLines().toString());

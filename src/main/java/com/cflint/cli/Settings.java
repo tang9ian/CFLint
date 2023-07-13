@@ -42,7 +42,7 @@ public class Settings {
     public static final String MARKDOWN = "markdown";
 
     /**
-     *  List of rules to currently check for.
+     * List of rules to currently check for.
      */
     public static final String CONFIG = "config";
 
@@ -107,7 +107,7 @@ public class Settings {
     public static final String EXTENSIONS = "extensions";
 
     /**
-     *  XML or JSON file containing rule config.
+     * XML or JSON file containing rule config.
      */
     public static final String CONFIGFILE = "configfile";
 
@@ -195,6 +195,6 @@ public class Settings {
      * Cannot be constructed.
      */
     private Settings() {
-      throw new IllegalStateException("Settings utility class");
+        throw new IllegalStateException("Settings utility class");
     }
 }

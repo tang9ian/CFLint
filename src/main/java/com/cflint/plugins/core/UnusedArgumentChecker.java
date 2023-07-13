@@ -1,6 +1,5 @@
 package com.cflint.plugins.core;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,29 +26,29 @@ public class UnusedArgumentChecker extends CFLintScannerAdapter {
 //    protected Map<String, Integer> argumentOffset = new HashMap<>();
     protected Map<String, ArgInfo> currentArgs = new LinkedHashMap<>();
 
-    static class ArgInfo{
+    static class ArgInfo {
         Boolean used = false;
         Integer argumentLineNo;
         Integer argumentOffset;
         String type;
         String casedName;
     }
-    
+
     @Override
     public void element(final Element element, final Context context, final BugList bugs) {
         if (element.getName().equals(CF.CFARGUMENT)) {
-            final String name = element.getAttributeValue(CF.NAME) != null
-                ? element.getAttributeValue(CF.NAME) : "";
+            final String name = element.getAttributeValue(CF.NAME) != null ? element.getAttributeValue(CF.NAME) : "";
             ArgInfo argInfo = new ArgInfo();
-            argInfo.casedName=name;
-            argInfo.argumentLineNo=context.startLine();
-            argInfo.argumentOffset=element.getAttributeValue(CF.NAME) != null 
-                    ? element.getAttributes().get(CF.NAME).getValueSegment().getBegin() : element.getBegin();
-            argInfo.type=element.getAttributeValue(CF.TYPE);
+            argInfo.casedName = name;
+            argInfo.argumentLineNo = context.startLine();
+            argInfo.argumentOffset = element.getAttributeValue(CF.NAME) != null
+                    ? element.getAttributes().get(CF.NAME).getValueSegment().getBegin()
+                    : element.getBegin();
+            argInfo.type = element.getAttributeValue(CF.TYPE);
             currentArgs.put(name.toLowerCase(), argInfo);
             final String code = element.getParentElement().toString();
             if (isUsed(code, name.toLowerCase())) {
-                argInfo.used=true;
+                argInfo.used = true;
             }
         }
     }
@@ -59,16 +58,16 @@ public class UnusedArgumentChecker extends CFLintScannerAdapter {
         if (expression instanceof CFFuncDeclStatement) {
             final CFFuncDeclStatement function = (CFFuncDeclStatement) expression;
             for (final CFFunctionParameter argument : function.getFormals()) {
-                final String name = argument.getName().toLowerCase(); 
+                final String name = argument.getName().toLowerCase();
                 // CF variable names are not case sensitive
                 ArgInfo argInfo = new ArgInfo();
-                argInfo.casedName=argument.getName();
-                argInfo.argumentLineNo=function.getLine();
-                argInfo.argumentOffset=context.offset() + argument.getOffset();
-                argInfo.type=argument.getType();
+                argInfo.casedName = argument.getName();
+                argInfo.argumentLineNo = function.getLine();
+                argInfo.argumentOffset = context.offset() + argument.getOffset();
+                argInfo.type = argument.getType();
                 currentArgs.put(name, argInfo);
                 if (isUsed(function.Decompile(0), name)) {
-                    argInfo.used=true;
+                    argInfo.used = true;
                 }
             }
         }
@@ -79,7 +78,7 @@ public class UnusedArgumentChecker extends CFLintScannerAdapter {
             final CFExpression identifier1 = fullVarExpression.getExpressions().get(0);
             if (identifier1 instanceof CFIdentifier) {
                 if ("arguments".equalsIgnoreCase(((CFIdentifier) identifier1).getName())
-                    && fullVarExpression.getExpressions().size() > 1) {
+                        && fullVarExpression.getExpressions().size() > 1) {
                     final CFExpression identifier2 = fullVarExpression.getExpressions().get(1);
                     if (identifier2 instanceof CFIdentifier) {
                         useIdentifier((CFIdentifier) identifier2);
@@ -94,14 +93,14 @@ public class UnusedArgumentChecker extends CFLintScannerAdapter {
     protected void useIdentifier(final CFIdentifier identifier) {
         final String name = identifier.getName().toLowerCase();
         if (currentArgs.get(name) != null) {
-            currentArgs.get(name).used=true;
+            currentArgs.get(name).used = true;
         }
     }
-    
+
     protected void useIdentifier(final CFFunctionExpression identifier) {
         final String name = identifier.getName().toLowerCase();
         if (currentArgs.get(name) != null && CF.FUNCTION.equalsIgnoreCase(currentArgs.get(name).type)) {
-            currentArgs.get(name).used=true;
+            currentArgs.get(name).used = true;
         }
     }
 
@@ -111,7 +110,7 @@ public class UnusedArgumentChecker extends CFLintScannerAdapter {
             useIdentifier((CFFullVarExpression) expression);
         } else if (expression instanceof CFIdentifier) {
             useIdentifier((CFIdentifier) expression);
-        } else if(expression instanceof CFFunctionExpression){
+        } else if (expression instanceof CFFunctionExpression) {
             useIdentifier((CFFunctionExpression) expression);
         }
     }

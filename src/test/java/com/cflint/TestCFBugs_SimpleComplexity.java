@@ -100,7 +100,7 @@ public class TestCFBugs_SimpleComplexity {
         final List<BugInfo> result = lintresult.getIssues().get("FUNCTION_TOO_COMPLEX");
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(cfcSrc.indexOf("function"),result.get(0).getOffset());
+        assertEquals(cfcSrc.indexOf("function"), result.get(0).getOffset());
     }
 
 }

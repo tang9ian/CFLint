@@ -22,7 +22,8 @@ public class TestCFBugs {
 
     @Before
     public void setUp() throws IOException, CFLintConfigurationException {
-        final ConfigBuilder configBuilder = new ConfigBuilder().include("MISSING_VAR","GLOBAL_VAR","NESTED_CFOUTPUT","QUERYNEW_DATATYPE","MISSING_SEMI");
+        final ConfigBuilder configBuilder = new ConfigBuilder().include("MISSING_VAR", "GLOBAL_VAR", "NESTED_CFOUTPUT",
+                "QUERYNEW_DATATYPE", "MISSING_SEMI");
         cfBugs = new CFLintAPI(configBuilder.build());
     }
 
@@ -57,8 +58,8 @@ public class TestCFBugs {
     public void testSimpleCFReadVar() throws CFLintScanException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
                 + "	<cfif trim(Privilege) EQ \"\" or isUserInRole('#Privilege#')>\r\n"
-                + "	<cfoutput>#x#</cfoutput>\r\n" + "	<cfset var y=x/>\r\n" + "	</cfif>"
-                + "</cffunction>" + "</cfcomponent>";
+                + "	<cfoutput>#x#</cfoutput>\r\n" + "	<cfset var y=x/>\r\n" + "	</cfif>" + "</cffunction>"
+                + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         Collection<List<BugInfo>> result = lintresult.getIssues().values();
         assertEquals(0, result.size());
@@ -91,9 +92,8 @@ public class TestCFBugs {
     @Test
     public void testSimpleCFSCRIPTCommentInScript() throws CFLintScanException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n" + "	<cfscript>\r\n"
-                + "   // Set Rate Event Fields;\r\n" + "	var x={};\r\n" + "	</cfscript>\r\n"
-                + "	<cfscript>\r\n" + "	x.xx=123;\r\n" + "	</cfscript>\r\n" + "</cffunction>\r\n"
-                + "</cfcomponent>";
+                + "   // Set Rate Event Fields;\r\n" + "	var x={};\r\n" + "	</cfscript>\r\n" + "	<cfscript>\r\n"
+                + "	x.xx=123;\r\n" + "	</cfscript>\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         Collection<List<BugInfo>> result = lintresult.getIssues().values();
         assertEquals("" + result, 0, result.size());
@@ -102,9 +102,8 @@ public class TestCFBugs {
     @Test
     public void testSimpleCFQUERYNested() throws CFLintScanException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
-                + "	<cfoutput query=\"q123\">\r\n" + "	<cfset var y=123/>\r\n"
-                + "	<cfoutput>#y#</cfoutput>\r\n" + "	</cfoutput>\r\n" + "</cffunction>\r\n"
-                + "/<cfcomponent>";
+                + "	<cfoutput query=\"q123\">\r\n" + "	<cfset var y=123/>\r\n" + "	<cfoutput>#y#</cfoutput>\r\n"
+                + "	</cfoutput>\r\n" + "</cffunction>\r\n" + "/<cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(1, result.size());
@@ -160,8 +159,7 @@ public class TestCFBugs {
     public void testSimpleCFQUERYNestedWithGroup() throws CFLintScanException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
                 + "	<cfoutput query=\"q123\" group=\"x\">\r\n" + "	<cfset var y=123/>\r\n"
-                + "	<cfoutput>#y#</cfoutput>\r\n" + "	</cfoutput>\r\n" + "</cffunction>\r\n"
-                + "/<cfcomponent>";
+                + "	<cfoutput>#y#</cfoutput>\r\n" + "	</cfoutput>\r\n" + "</cffunction>\r\n" + "/<cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         assertEquals(0, lintresult.getIssues().size());
     }
@@ -234,9 +232,8 @@ public class TestCFBugs {
     public void testCFScriptForDeclare() throws CFLintScanException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"func1\">\r\n" + "	<cfscript>\r\n"
                 + "			for (var a=1;a LTE arraylen(d); a=a+1) {\r\n"
-                + "				if(d[a].getName() EQ drawer){\r\n"
-                + "					return d[a];\r\n" + "				}\r\n"
-                + "			}\r\n" + "	</cfscript>\r\n" + "</cffunction>" + "</cfcomponent>";
+                + "				if(d[a].getName() EQ drawer){\r\n" + "					return d[a];\r\n"
+                + "				}\r\n" + "			}\r\n" + "	</cfscript>\r\n" + "</cffunction>" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         assertEquals(0, lintresult.getIssues().size());
     }
@@ -245,9 +242,8 @@ public class TestCFBugs {
     public void testCFScriptForUnVarred() throws CFLintScanException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"func1\">\r\n" + "	<cfscript>\r\n"
                 + "			for (a=1;a LTE arraylen(d); a=a+1) {\r\n"
-                + "				if(d[a].getName() EQ drawer){\r\n"
-                + "					return d[a];\r\n" + "				}\r\n"
-                + "			}\r\n" + "	</cfscript>\r\n" + "</cffunction>" + "</cfcomponent>";
+                + "				if(d[a].getName() EQ drawer){\r\n" + "					return d[a];\r\n"
+                + "				}\r\n" + "			}\r\n" + "	</cfscript>\r\n" + "</cffunction>" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(1, result.size());
@@ -258,17 +254,16 @@ public class TestCFBugs {
     @Test
     public void testCFScriptAStruct() throws CFLintScanException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"func1\">\r\n" + "	<cfscript>\r\n"
-                + "		var a = {};\r\n"
-                + "		a.response = processRequest(argumentCollection=arguments);\r\n" + "	</cfscript>\r\n"
-                + "</cffunction>" + "</cfcomponent>";
+                + "		var a = {};\r\n" + "		a.response = processRequest(argumentCollection=arguments);\r\n"
+                + "	</cfscript>\r\n" + "</cffunction>" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         assertEquals(0, lintresult.getIssues().size());
     }
 
     @Test
     public void testGlobalVarCheckerNPE() throws CFLintScanException {
-        CFLintResult lintresult = cfBugs.scan("component {\r\n" + "public any function process(){\r\n" + "url.x=123;\r\n" + "}\r\n" + "}",
-                "test");
+        CFLintResult lintresult = cfBugs.scan(
+                "component {\r\n" + "public any function process(){\r\n" + "url.x=123;\r\n" + "}\r\n" + "}", "test");
         List<BugInfo> list = lintresult.getIssues().get("GLOBAL_VAR");
         assertEquals(list.toString(), 1, list.size());
         assertEquals("test", list.get(0).getFilename());
@@ -278,7 +273,7 @@ public class TestCFBugs {
 
     @Test
     public void testVarScoper() throws CFLintScanException {
-    	String src = "component {\r\n" + "public any function process(){\r\n" + "   x=123;\r\n" + "}\r\n" + "}";
+        String src = "component {\r\n" + "public any function process(){\r\n" + "   x=123;\r\n" + "}\r\n" + "}";
         CFLintResult lintresult = cfBugs.scan(src, "test");
         List<BugInfo> list = lintresult.getIssues().get("MISSING_VAR");
         assertEquals(1, list.size());
@@ -292,40 +287,40 @@ public class TestCFBugs {
 
     @Test
     public void testMissingSemi() throws CFLintScanException {
-        String src = "component {\n" + " function test() {\n" + "   name_1 \n" +  "    name2 = \"Smith\"\n" + 
-                " last.name1 = \"Fred\"\n" + " }\n" + "}";
+        String src = "component {\n" + " function test() {\n" + "   name_1 \n" + "    name2 = \"Smith\"\n"
+                + " last.name1 = \"Fred\"\n" + " }\n" + "}";
         CFLintResult lintresult = cfBugs.scan(src, "test");
         List<BugInfo> list = lintresult.getIssues().get("MISSING_SEMI");
         assertNotNull(list);
         assertEquals(1, list.size());
         assertEquals(3, list.get(0).getLine());
         assertEquals(8, list.get(0).getColumn());
-        assertEquals(39, src.indexOf("name_1") + "name_1".length() -1 );
+        assertEquals(39, src.indexOf("name_1") + "name_1".length() - 1);
         assertEquals(39, list.get(0).getOffset());
     }
 
     @Test
     public void testMissingSemiTag() throws CFLintScanException {
-        String src = "<cfcomponent>\n" + "<cfscript> function test() {\n" + " name_1 \n" +  "    name2 = \"Smith\"\n" + 
-                " last.name1 = \"Fred\"\n" + " }\n" + "</cfscript> </component>";
+        String src = "<cfcomponent>\n" + "<cfscript> function test() {\n" + " name_1 \n" + "    name2 = \"Smith\"\n"
+                + " last.name1 = \"Fred\"\n" + " }\n" + "</cfscript> </component>";
         CFLintResult lintresult = cfBugs.scan(src, "test");
         List<BugInfo> list = lintresult.getIssues().get("MISSING_SEMI");
         assertNotNull(list);
         assertEquals(1, list.size());
-        assertEquals(49, src.indexOf("name_1") + "name_1".length() -1 );
+        assertEquals(49, src.indexOf("name_1") + "name_1".length() - 1);
         assertEquals(49, list.get(0).getOffset());
         assertEquals(3, list.get(0).getLine());
         assertEquals(6, list.get(0).getColumn());
     }
-    
+
     @Test
     public void testMissingSemiTag2() throws CFLintScanException {
-        String src = "<cfscript>   name_1 \n" +  "    name2 = \"Smith\"\n</cfscript>";
+        String src = "<cfscript>   name_1 \n" + "    name2 = \"Smith\"\n</cfscript>";
         CFLintResult lintresult = cfBugs.scan(src, "test");
         List<BugInfo> list = lintresult.getIssues().get("MISSING_SEMI");
         assertNotNull(list);
         assertEquals(1, list.size());
-        assertEquals(18, src.indexOf("name_1") + "name_1".length() -1 );
+        assertEquals(18, src.indexOf("name_1") + "name_1".length() - 1);
         assertEquals(18, list.get(0).getOffset());
         assertEquals(1, list.get(0).getLine());
         assertEquals(18, list.get(0).getColumn());

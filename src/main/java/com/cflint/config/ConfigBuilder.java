@@ -27,8 +27,9 @@ public class ConfigBuilder {
 
     /**
      * Apply the listed rule groups
-     * @param rulegroups        rule groups
-     * @return                  this ConfigBuilder
+     *
+     * @param rulegroups rule groups
+     * @return this ConfigBuilder
      */
     public ConfigBuilder ruleGroups(final String rulegroups) {
         final boolean include = !rulegroups.startsWith("!");
@@ -45,12 +46,12 @@ public class ConfigBuilder {
     }
 
     /**
-     * Add a custom configuration on top of the baseline. Hint: most
-     * configurations do not need this.
-     * 
-     * @param fileName          the custom config file
-     * @return                  this ConfigBuilder
-     * @throws  Exception       exception when configuration fails
+     * Add a custom configuration on top of the baseline. Hint: most configurations
+     * do not need this.
+     *
+     * @param fileName the custom config file
+     * @return this ConfigBuilder
+     * @throws Exception exception when configuration fails
      */
     public ConfigBuilder addCustomConfig(final String fileName) throws Exception {
         File file = new File(fileName);
@@ -62,8 +63,9 @@ public class ConfigBuilder {
     }
 
     /**
-     *  Builds the configuration object.
-     * @return                  this ConfigBuilder
+     * Builds the configuration object.
+     *
+     * @return this ConfigBuilder
      */
     public CFLintChainedConfig build() {
         // Exclude experimental by default
@@ -77,9 +79,9 @@ public class ConfigBuilder {
 
     /**
      * Exclude these rule codes
-     * 
-     * @param codes             list of rule codes to exclude
-     * @return                  this ConfigBuilder
+     *
+     * @param codes list of rule codes to exclude
+     * @return this ConfigBuilder
      */
     public ConfigBuilder exclude(final List<String> codes) {
         if (cmdLineConfig == null) {
@@ -91,9 +93,9 @@ public class ConfigBuilder {
 
     /**
      * Include these rule codes
-     * 
-     * @param codes             list of rule codes to include
-     * @return                  this ConfigBuilder
+     *
+     * @param codes list of rule codes to include
+     * @return this ConfigBuilder
      */
     public ConfigBuilder include(final List<String> codes) {
         if (cmdLineConfig == null) {
@@ -105,24 +107,24 @@ public class ConfigBuilder {
         });
         return this;
     }
-    
+
     /**
      * Include these rule codes
-     * 
-     * @param codes             list of rule codes to include
-     * @return                  this ConfigBuilder
+     *
+     * @param codes list of rule codes to include
+     * @return this ConfigBuilder
      */
-    public ConfigBuilder include(final String ... codes){
+    public ConfigBuilder include(final String... codes) {
         return include(Arrays.asList(codes));
     }
-    
+
     /**
      * Exclude these rule codes
-     * 
-     * @param codes             list of rule codes to exclude
-     * @return                  this ConfigBuilder
+     *
+     * @param codes list of rule codes to exclude
+     * @return this ConfigBuilder
      */
-    public ConfigBuilder exclude(final String ... codes){
+    public ConfigBuilder exclude(final String... codes) {
         return exclude(Arrays.asList(codes));
     }
 }

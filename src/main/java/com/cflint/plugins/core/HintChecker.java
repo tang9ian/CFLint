@@ -1,11 +1,11 @@
 package com.cflint.plugins.core;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.cflint.plugins.CFLintScannerAdapter;
 import com.cflint.plugins.Context;
 import com.cflint.tools.PrecedingCommentReader;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import cfml.parsing.cfscript.script.CFScriptStatement;
 
@@ -17,11 +17,12 @@ public class HintChecker extends CFLintScannerAdapter {
     /**
      * Check for missing hint attributes.
      *
-     * @param message message to report.
+     * @param message    message to report.
      * @param expression expression to scan.
-     * @param context expression context.
+     * @param context    expression context.
      */
-    protected void checkHint(final String message, final String name, final CFScriptStatement expression, final Context context) {
+    protected void checkHint(final String message, final String name, final CFScriptStatement expression,
+            final Context context) {
         final String multiLineText = PrecedingCommentReader.getMultiLine(context, expression.getToken());
         final String mlText = multiLineText == null ? null
                 : multiLineText.replaceFirst("^/\\*", "").replaceAll("\\*/$", "").trim();

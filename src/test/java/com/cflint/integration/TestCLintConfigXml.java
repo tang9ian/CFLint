@@ -22,8 +22,8 @@ public class TestCLintConfigXml {
 
     @Before
     public void setUp() throws Exception {
-        final com.cflint.config.CFLintConfiguration conf = createDefaultLimited("CFInsertChecker",
-                "CFUpdateChecker", "CFModuleChecker");
+        final com.cflint.config.CFLintConfiguration conf = createDefaultLimited("CFInsertChecker", "CFUpdateChecker",
+                "CFModuleChecker");
         cflint = new CFLint(conf);
     }
 
@@ -73,7 +73,7 @@ public class TestCLintConfigXml {
         assertEquals("AVOID_USING_CFMODULE_TAG", result.get(0).getMessageCode());
         assertEquals("Avoid using <cfmodule> tags.", result.get(0).getMessage());
     }
-    
+
     public static CFLintConfiguration createDefaultLimited(final String... rulenames) {
         final CFLintPluginInfo pluginInfo = ConfigUtils.loadDefaultPluginInfo();
         CFLintConfig defaultConfig = new CFLintConfig();

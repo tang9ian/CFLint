@@ -29,7 +29,7 @@ public class HTMLOutput {
      * Output bug list in HTML format.
      */
     public void output(final BugList bugList, final Writer writer, final CFLintStats stats)
-        throws IOException, TransformerException {
+            throws IOException, TransformerException {
 
         // 1. Instantiate a TransformerFactory.
         final javax.xml.transform.TransformerFactory tFactory = javax.xml.transform.TransformerFactory.newInstance();
@@ -50,8 +50,7 @@ public class HTMLOutput {
 
         // 3. Use the Transformer to transform an XML Source and send the
         // output to a Result object.
-        transformer.transform(new StreamSource(new StringReader(sw.toString())),
-            new StreamResult(writer));
+        transformer.transform(new StreamSource(new StringReader(sw.toString())), new StreamResult(writer));
 
         writer.close();
     }

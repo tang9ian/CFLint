@@ -88,7 +88,7 @@ public class CFLintPluginInfo {
         public void setDefaultSeverity(Levels defaultSeverity) {
             this.defaultSeverity = defaultSeverity;
         }
-        
+
         public String getName() {
             return name;
         }
@@ -188,10 +188,7 @@ public class CFLintPluginInfo {
             if (this == obj) {
                 return true;
             }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
+            if ((obj == null) || (getClass() != obj.getClass())) {
                 return false;
             }
             final PluginInfoRule other = (PluginInfoRule) obj;
@@ -227,6 +224,7 @@ public class CFLintPluginInfo {
             public PluginParameter() {
                 super();
             }
+
             public PluginParameter(String name, Object value) {
                 super();
                 this.name = name;
@@ -249,7 +247,7 @@ public class CFLintPluginInfo {
                 return value;
             }
 
-            @JsonProperty(value="value")
+            @JsonProperty(value = "value")
             public void setValue(final Object value) {
                 this.value = value;
             }
@@ -258,7 +256,7 @@ public class CFLintPluginInfo {
             public String toString() {
                 return "PluginParameter [name=" + name + ", value=" + value + "]";
             }
-            
+
         }
 
         @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "code")
@@ -276,7 +274,6 @@ public class CFLintPluginInfo {
                 super();
             }
 
-            
             public String getCode() {
                 return code;
             }
@@ -321,10 +318,7 @@ public class CFLintPluginInfo {
                 if (this == obj) {
                     return true;
                 }
-                if (obj == null) {
-                    return false;
-                }
-                if (getClass() != obj.getClass()) {
+                if ((obj == null) || (getClass() != obj.getClass())) {
                     return false;
                 }
                 final PluginMessage other = (PluginMessage) obj;

@@ -19,7 +19,7 @@ public class TestCFBugs_ArgsUse {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigBuilder configBuilder = new ConfigBuilder().include("ARG_VAR_CONFLICT","ARG_VAR_MIXED");
+        final ConfigBuilder configBuilder = new ConfigBuilder().include("ARG_VAR_CONFLICT", "ARG_VAR_MIXED");
         cfBugs = new CFLintAPI(configBuilder.build());
     }
 
@@ -59,8 +59,7 @@ public class TestCFBugs_ArgsUse {
     public void testVarAndArgs_Struct() throws CFLintScanException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
                 + "	<cfargument name=\"page\" default=\"\">\r\n"
-                + "	<cfset variables.instance.page = arguments.page />\r\n" + "</cffunction>\r\n"
-                + "</cfcomponent>";
+                + "	<cfset variables.instance.page = arguments.page />\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         assertEquals(lintresult.getIssues().toString(), 0, lintresult.getIssues().size());
     }

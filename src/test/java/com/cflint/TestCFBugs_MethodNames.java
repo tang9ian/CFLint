@@ -19,7 +19,9 @@ public class TestCFBugs_MethodNames {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigBuilder configBuilder = new ConfigBuilder().include("METHOD_INVALID_NAME","METHOD_ALLCAPS_NAME","METHOD_TOO_SHORT","METHOD_TOO_LONG","METHOD_TOO_WORDY","METHOD_IS_TEMPORARY","METHOD_HAS_PREFIX_OR_POSTFIX");
+        final ConfigBuilder configBuilder = new ConfigBuilder().include("METHOD_INVALID_NAME", "METHOD_ALLCAPS_NAME",
+                "METHOD_TOO_SHORT", "METHOD_TOO_LONG", "METHOD_TOO_WORDY", "METHOD_IS_TEMPORARY",
+                "METHOD_HAS_PREFIX_OR_POSTFIX");
         cfBugs = new CFLintAPI(configBuilder.build());
     }
 
@@ -54,7 +56,6 @@ public class TestCFBugs_MethodNames {
         assertEquals("METHOD_INVALID_NAME", result.get(0).getMessageCode());
         assertEquals(2, result.get(0).getLine());
     }
-
 
     @Test
     public void nameTooShortTag() throws CFLintScanException {

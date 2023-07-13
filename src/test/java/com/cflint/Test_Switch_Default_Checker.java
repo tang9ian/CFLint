@@ -57,8 +57,8 @@ public class Test_Switch_Default_Checker {
         final String cfcSrc = "switch(rejectCode[applicant]) {" + "	case \"score\": "
                 + "		WriteOutput(\"Reject reason: Score was too low.<br>\"); " + "		break; "
                 + "	case \"late\": " + "		WriteOutput(\"Reject reason: Application was late.<br>\"); "
-                + "		break; " + "	default: "
-                + "		WriteOutput(\"Rejected with invalid reason code.<br>\"); " + "}";
+                + "		break; " + "	default: " + "		WriteOutput(\"Rejected with invalid reason code.<br>\"); "
+                + "}";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         Collection<List<BugInfo>> result = lintresult.getIssues().values();
         assertEquals(0, result.size());

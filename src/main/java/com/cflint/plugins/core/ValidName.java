@@ -85,7 +85,8 @@ public class ValidName {
     /**
      * Default prefixes to avoid.
      */
-    private static final String[] DEFAULT_PREFIXES_TO_AVOID = { "s", "st", "str", "o", "obj", "b", "q", "a", "arr", "this", "my", "stu" };
+    private static final String[] DEFAULT_PREFIXES_TO_AVOID = { "s", "st", "str", "o", "obj", "b", "q", "a", "arr",
+            "this", "my", "stu" };
 
     /**
      * Prefixes to avoid.
@@ -107,7 +108,7 @@ public class ValidName {
      *
      * @param minLength minimum length of name.
      * @param maxLength maximum length of name.
-     * @param maxWords maximum no of words in a name.
+     * @param maxWords  maximum no of words in a name.
      */
     public ValidName(final int minLength, final int maxLength, final int maxWords) {
         this.minLength = minLength;
@@ -121,12 +122,12 @@ public class ValidName {
      * @param name name of variable.
      * @return true if name is valid or false if it is not.
      */
-    public boolean isInvalid(final String name,final String caseType) {
-    	if(name == null) {
-    		return false;
-    	}
-        boolean caseOk = ("PascalCase".equalsIgnoreCase(caseType)? isPascalCase(name) : isCamelCase(name));
-        return !validChars(name) //|| endsInNumber(name)
+    public boolean isInvalid(final String name, final String caseType) {
+        if (name == null) {
+            return false;
+        }
+        boolean caseOk = ("PascalCase".equalsIgnoreCase(caseType) ? isPascalCase(name) : isCamelCase(name));
+        return !validChars(name) // || endsInNumber(name)
                 || !(isSameCase(name) || caseOk || usesUnderscores(name));
     }
 
@@ -136,11 +137,11 @@ public class ValidName {
      * @param name name of variable.
      * @return true if name is valid or false if it is not.
      */
-    public boolean isInvalidComponent(final String name,final String caseType) {
-    	if(name == null) {
-    		return false;
-    	}
-        boolean caseOk = ("PascalCase".equalsIgnoreCase(caseType)? isPascalCase(name) : isCamelCase(name));
+    public boolean isInvalidComponent(final String name, final String caseType) {
+        if (name == null) {
+            return false;
+        }
+        boolean caseOk = ("PascalCase".equalsIgnoreCase(caseType) ? isPascalCase(name) : isCamelCase(name));
         return !validChars(name) || endsInNumber(name)
                 || !(isUpperCase(name) || isPascalCase(name) || usesUnderscores(name));
     }
@@ -152,9 +153,9 @@ public class ValidName {
      * @return true if the name consists of valid chartacters, false if it does not.
      */
     public boolean validChars(final String name) {
-    	if(name == null) {
-    		return true;
-    	}
+        if (name == null) {
+            return true;
+        }
         final Pattern valid = Pattern.compile("^[A-Za-z0-9_]+$");
         return valid.matcher(name).matches();
     }
@@ -166,9 +167,9 @@ public class ValidName {
      * @return true if the name is all upppercase, false if it is not.
      */
     public boolean isUpperCase(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
+        if (name == null) {
+            return false;
+        }
         return name.toUpperCase().equals(name);
     }
 
@@ -179,9 +180,9 @@ public class ValidName {
      * @return true if the name is all upppercase, false if it is not.
      */
     public boolean isSameCase(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
+        if (name == null) {
+            return false;
+        }
         return name.equals(name.toLowerCase()) || name.equals(name.toUpperCase());
     }
 
@@ -192,9 +193,9 @@ public class ValidName {
      * @return true if the camel case, false if it is not.
      */
     public boolean isCamelCase(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
+        if (name == null) {
+            return false;
+        }
         // [A-Z0-9]{2,5} catch names like productID, phone4G, requestURL etc etc
         final Pattern valid = Pattern.compile("^[a-z0-9]+([A-Z]{1,5}[a-z0-9]+)*([A-Z0-9]{2,5}){0,1}[A-Z]?$");
         return valid.matcher(name).matches();
@@ -207,9 +208,9 @@ public class ValidName {
      * @return true if the camel case, false if it is not.
      */
     public boolean isPascalCase(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
+        if (name == null) {
+            return false;
+        }
         final Pattern valid = Pattern.compile("^([A-Z]{1,5}[a-z0-9]+)+([A-Z0-9]{2,5}){0,1}[A-Z]?$");
         return valid.matcher(name).matches();
     }
@@ -221,10 +222,10 @@ public class ValidName {
      * @return true if name contains an underscore, false if it does not.
      */
     public boolean usesUnderscores(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
-       return name.indexOf('_') != -1;
+        if (name == null) {
+            return false;
+        }
+        return name.indexOf('_') != -1;
     }
 
     /**
@@ -234,9 +235,9 @@ public class ValidName {
      * @return true if name ends in one or more digits, false if it does not.
      */
     public boolean endsInNumber(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
+        if (name == null) {
+            return false;
+        }
         final char lastLetter = name.charAt(name.length() - 1);
         return Character.isDigit(lastLetter);
     }
@@ -248,9 +249,9 @@ public class ValidName {
      * @return true if name is too short, false if it does not.
      */
     public boolean tooShort(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
+        if (name == null) {
+            return false;
+        }
         return name.length() < minLength;
     }
 
@@ -261,9 +262,9 @@ public class ValidName {
      * @return true if name is too long, false if it is not.
      */
     public boolean tooLong(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
+        if (name == null) {
+            return false;
+        }
         return name.length() > maxLength;
     }
 
@@ -274,14 +275,14 @@ public class ValidName {
      * @return true if name contains too many words, false if it does not.
      */
     public boolean tooWordy(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
-       final String[] words = name.split("[A-Z_]+");
+        if (name == null) {
+            return false;
+        }
+        final String[] words = name.split("[A-Z_]+");
         int count = 0;
 
-        for (int i = 0; i < words.length; i++) {
-            if (words[i] != null && !words[i].equals("")) {
+        for (String word : words) {
+            if (word != null && !word.equals("")) {
                 count++;
             }
         }
@@ -296,9 +297,9 @@ public class ValidName {
      * @return true if the name is temporary, false if it does not.
      */
     public boolean isTemporary(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
+        if (name == null) {
+            return false;
+        }
         final String[] wordsToAvoid = { "temp", "tmp", "var", "func", "obj", "object", "bool", "struct", "string",
                 "array", "comp" };
         String sentence = name.replaceAll("_", " ");
@@ -319,20 +320,20 @@ public class ValidName {
     /**
      * Does the name have a prefix or postfix?
      *
-     * @param name  name of variable.
-     * @return  true if the name has a prefix or postfix, false if it does not.
+     * @param name name of variable.
+     * @return true if the name has a prefix or postfix, false if it does not.
      */
     public boolean hasPrefixOrPostfix(final String name) {
-    	if(name == null) {
-    		return false;
-    	}
+        if (name == null) {
+            return false;
+        }
         String sentence = name.replaceAll("_", " ");
         sentence = sentence.replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");
 
         if (sentence.trim().length() == 0) {
-        	return false;
+            return false;
         }
-        
+
         final String[] words = sentence.split(" ");
         final String firstWord = words[0];
         final String lastWord = words[words.length - 1];
@@ -383,7 +384,7 @@ public class ValidName {
     }
 
     /**
-     *  Set the suffixes to avoid.
+     * Set the suffixes to avoid.
      *
      * @param suffixesToAvoid suffixes to avoid.
      */

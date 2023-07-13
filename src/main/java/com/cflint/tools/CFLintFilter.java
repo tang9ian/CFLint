@@ -7,11 +7,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.cflint.Levels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cflint.BugInfo;
+import com.cflint.Levels;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -165,7 +165,7 @@ public class CFLintFilter {
     /**
      * Identify a subset of the filter that can be applied without parsing i.e.
      * filename.
-     * 
+     *
      * @return instance of CFLintFilter
      */
     public CFLintFilter createFilePreFilter() {

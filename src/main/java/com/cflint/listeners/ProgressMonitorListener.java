@@ -39,7 +39,7 @@ public class ProgressMonitorListener implements ScanProgressListener {
 
     @Override
     public void finishedProcessing(final String srcidentifier) {
-    	//Empty implementation
+        // Empty implementation
     }
 
     public void setTotalToProcess(final int total) {

@@ -1,10 +1,11 @@
 package com.cflint.tools;
 
+import com.cflint.CF;
+
 import cfml.dictionary.Parameter;
 import cfml.dictionary.Return;
 import cfml.dictionary.SyntaxDictionary;
 import cfml.dictionary.Tag;
-import com.cflint.CF;
 import net.htmlparser.jericho.Element;
 
 public class CFMLTagInfo {
@@ -14,16 +15,16 @@ public class CFMLTagInfo {
     public CFMLTagInfo(final SyntaxDictionary dictionary) {
         this.dictionary = dictionary;
     }
-    
-    public boolean isTag(String elementName){
+
+    public boolean isTag(String elementName) {
         final Tag tag = dictionary.getTag(elementName.toLowerCase());
         return tag != null;
     }
 
     /**
-     * 
-     * @param element           the element
-     * @param attributeName     the attribute name
+     *
+     * @param element       the element
+     * @param attributeName the attribute name
      * @return true when the tag/attribute combination represents a variable
      *         assignment.
      */
@@ -35,9 +36,9 @@ public class CFMLTagInfo {
     }
 
     /**
-     * 
-     * @param elementName       the element
-     * @param attributeName     the attribute name
+     *
+     * @param elementName   the element
+     * @param attributeName the attribute name
      * @return true when the tag/attribute combination represents a variable
      *         assignment.
      */
@@ -70,9 +71,9 @@ public class CFMLTagInfo {
     }
 
     /**
-     * 
-     * @param element           the element
-     * @param attributeName     the attribute name
+     *
+     * @param element       the element
+     * @param attributeName the attribute name
      * @return true when the tag/attribute combination represents a variable
      *         reference.
      */
@@ -84,14 +85,14 @@ public class CFMLTagInfo {
     }
 
     /**
-     * 
-     * @param elementName       the element
-     * @param attributeName     the attribute name
+     *
+     * @param elementName   the element
+     * @param attributeName the attribute name
      * @return true when the tag/attribute combination represents a variable
      *         reference.
      */
     public boolean isExpressionAttribute(final String elementName, final String attributeName) {
-        if("cfdump".equalsIgnoreCase(elementName))
+        if ("cfdump".equalsIgnoreCase(elementName))
             return false;
         if (isAssignmentAttribute(elementName, attributeName)) {
             return true;

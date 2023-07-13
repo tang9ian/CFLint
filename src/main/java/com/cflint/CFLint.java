@@ -126,8 +126,8 @@ public class CFLint implements IErrorReporter {
     private CFLintConfiguration configuration;
     private int skipToPosition = 0;
     private String currentFile = null;
-    private String environmentName="";
-	private Element currentElement = null;
+    private String environmentName = "";
+    private Element currentElement = null;
     private boolean strictInclude;
     private Set<List<Object>> processed = new HashSet<>();
 
@@ -237,10 +237,10 @@ public class CFLint implements IErrorReporter {
     }
 
     private String getEnvSuffix() {
-		return environmentName.equals("")?"":"-" + environmentName;
-	}
+        return environmentName.equals("") ? "" : "-" + environmentName;
+    }
 
-	public void scan(final File folderOrFile) {
+    public void scan(final File folderOrFile) {
         if (debug) {
             System.out.println("Current file: " + folderOrFile.getAbsolutePath());
         }
@@ -252,9 +252,9 @@ public class CFLint implements IErrorReporter {
             return;
         }
         if (folderOrFile.isDirectory()) {
-            if (folderOrFile.getName().startsWith(".") && !folderOrFile.getName().equals(".")){
-                if(verbose) {
-                	System.out.println("Skipping folder and its children: " + folderOrFile.getAbsolutePath());
+            if (folderOrFile.getName().startsWith(".") && !folderOrFile.getName().equals(".")) {
+                if (verbose) {
+                    System.out.println("Skipping folder and its children: " + folderOrFile.getAbsolutePath());
                 }
                 return;
             }
@@ -312,21 +312,23 @@ public class CFLint implements IErrorReporter {
             if (verbose) {
                 e.printStackTrace(System.err);
             } else {
-                System.err.println("Error: \"" + e.getMessage() + "\" Location: " + (e.getStackTrace().length > 0 ? e.getStackTrace()[0] : "''"));
+                System.err.println("Error: \"" + e.getMessage() + "\" Location: "
+                        + (e.getStackTrace().length > 0 ? e.getStackTrace()[0] : "''"));
             }
         }
     }
 
     public void process(final String src, final String filename) throws CFLintScanException {
-        try{
+        try {
             fireStartedProcessing(filename);
             lineOffsets = null;
             if (src == null || src.trim().length() == 0) {
-                final Context context = new Context(filename, null, null, false, handler,configuration);
+                final Context context = new Context(filename, null, null, false, handler, configuration);
                 reportRule(null, null, context, null, new ContextMessage(AVOID_EMPTY_FILES, null));
             } else {
                 lineOffsets = getLineOffsets(src.split("\n"));
-                final CFMLSource cfmlSource = new CFMLSource(src.contains("<!---") ? CommentReformatting.wrap(src) : src);
+                final CFMLSource cfmlSource = new CFMLSource(
+                        src.contains("<!---") ? CommentReformatting.wrap(src) : src);
                 final ParserTag firstTag = getFirstTagQuietly(cfmlSource);
                 final List<Element> elements = new ArrayList<>();
                 if (firstTag != null) {
@@ -335,14 +337,15 @@ public class CFLint implements IErrorReporter {
                 if (isComponentOrInterfaceScript(src, elements)) {
                     // Check if pure cfscript
                     final CFScriptStatement scriptStatement = cfmlParser.parseScript(src);
-                    final Context context = new Context(filename, null, null, false, handler, scriptStatement==null?null:scriptStatement.getTokens(),configuration);
+                    final Context context = new Context(filename, null, null, false, handler,
+                            scriptStatement == null ? null : scriptStatement.getTokens(), configuration);
                     process(scriptStatement, context);
                 } else {
                     processStack(elements, " ", filename, null);
                 }
             }
             fireFinishedProcessing(filename);
-        }catch(final Exception e){
+        } catch (final Exception e) {
             throw new CFLintScanException(e);
         }
     }
@@ -359,7 +362,7 @@ public class CFLint implements IErrorReporter {
 
     /**
      * 'Detect' if this is a pure cfscript component or interface
-     * 
+     *
      * @param src
      * @param elements
      * @return
@@ -390,7 +393,7 @@ public class CFLint implements IErrorReporter {
             if (elem.getName().equals(CF.COMMENT)) {
                 commentElement = elem;
             } else {
-                final Context context = new Context(filename, elem, functionName, false, handler,configuration);
+                final Context context = new Context(filename, elem, functionName, false, handler, configuration);
                 if (commentElement != null) {
                     applyRuleOverrides(context, commentElement);
                     commentElement = null;
@@ -417,8 +420,7 @@ public class CFLint implements IErrorReporter {
         }
     }
 
-    private void process(final Element elem, final String space, final Context context)
-            throws CFLintScanException {
+    private void process(final Element elem, final String space, final Context context) throws CFLintScanException {
         if (skipToPosition > elem.getBegin()) {
             return;
         } else {
@@ -429,7 +431,8 @@ public class CFLint implements IErrorReporter {
             if (elem.getName().equalsIgnoreCase(CF.CFCOMPONENT)) {
                 final Context componentContext = context.subContext(elem);
                 componentContext.setInComponent(true);
-                componentContext.setComponentName(context.getFilename().replaceAll(".[cC][fF][cC]", "").replaceAll("^.*[/\\\\]", ""));//elem.getAttributeValue(CF.DISPLAYNAME)
+                componentContext.setComponentName(
+                        context.getFilename().replaceAll(".[cC][fF][cC]", "").replaceAll("^.*[/\\\\]", ""));// elem.getAttributeValue(CF.DISPLAYNAME)
                 componentContext.setContextType(ContextType.COMPONENT);
                 handler.push(CF.COMPONENT);
                 doStructureStart(elem, componentContext, CFCompDeclStatement.class);
@@ -466,7 +469,8 @@ public class CFLint implements IErrorReporter {
                             }
                         } catch (final Exception npe) {
                             printException(npe, elem);
-                            final ContextMessage cm = new ContextMessage(PARSE_ERROR, null, null, context.startLine(), elem.getBegin());
+                            final ContextMessage cm = new ContextMessage(PARSE_ERROR, null, null, context.startLine(),
+                                    elem.getBegin());
                             reportRule(currentElement, null, context, null, cm);
                         }
                     }
@@ -474,8 +478,7 @@ public class CFLint implements IErrorReporter {
                 processStack(elem.getChildElements(), space + " ", context);
 
             } else if (elem.getName().equalsIgnoreCase(CF.CFARGUMENT)
-                    || elem.getName().equalsIgnoreCase(CF.CFDOCUMENTSECTION)
-                    ) {
+                    || elem.getName().equalsIgnoreCase(CF.CFDOCUMENTSECTION)) {
                 scanElement(elem, context);
                 final String name = elem.getAttributeValue(CF.NAME);
                 if (name != null) {
@@ -505,7 +508,8 @@ public class CFLint implements IErrorReporter {
                 } catch (Exception e) {
                     throw new CFLintScanException(e);
                 }
-                final Context subcontext = context.subContext(elem,scriptStatement==null?null:scriptStatement.getTokens());
+                final Context subcontext = context.subContext(elem,
+                        scriptStatement == null ? null : scriptStatement.getTokens());
                 process(scriptStatement, subcontext);
                 processStack(elem.getChildElements(), space + " ", context);
             } else if (elem.getName().equalsIgnoreCase(CF.CFFUNCTION)) {
@@ -537,7 +541,8 @@ public class CFLint implements IErrorReporter {
             } else if (elem.getName().equalsIgnoreCase(CF.CFCOMPONENT)) {
                 final Context componentContext = context.subContext(elem);
                 componentContext.setInComponent(true);
-                componentContext.setComponentName(context.getFilename().replaceAll(".[cC][fF][cC]", "").replaceAll("^.*[/\\\\]", ""));//elem.getAttributeValue(CF.DISPLAYNAME)
+                componentContext.setComponentName(
+                        context.getFilename().replaceAll(".[cC][fF][cC]", "").replaceAll("^.*[/\\\\]", ""));// elem.getAttributeValue(CF.DISPLAYNAME)
                 componentContext.setContextType(ContextType.COMPONENT);
                 scanElement(elem, componentContext);
                 processStack(elem.getChildElements(), space + " ", componentContext);
@@ -605,7 +610,7 @@ public class CFLint implements IErrorReporter {
             } else if (elem.getName().equalsIgnoreCase(CF.CFCATCH)) {
                 scanElement(elem, context);
                 handler.push(CF.CFCATCH);
-                if(elem.getAttributeValue("name")!=null){
+                if (elem.getAttributeValue("name") != null) {
                     handler.addVariable(elem.getAttributeValue("name"));
                 }
                 processStack(elem.getChildElements(), space + " ", context);
@@ -614,8 +619,10 @@ public class CFLint implements IErrorReporter {
                 scanElement(elem, context);
                 for (final Entry<String, CFExpression> expression : unpackTagExpressions(elem).entrySet()) {
                     if (expression != null) {
-                        process(expression.getValue(), elem, tagInfo.isAssignmentAttribute(elem, expression.getKey())
-                                ? context.subContextInAssignment() : context);
+                        process(expression.getValue(), elem,
+                                tagInfo.isAssignmentAttribute(elem, expression.getKey())
+                                        ? context.subContextInAssignment()
+                                        : context);
                     }
                 }
                 processStack(elem.getChildElements(), space + " ", context);
@@ -678,21 +685,21 @@ public class CFLint implements IErrorReporter {
                 }
             }
         }
-        //Parse the body
-        if(elem.getName().toLowerCase().equals("cfoutput")) {
-        	final String content = elem.getContent().getTextExtractor().toString();
-        	if(content !=null && content.length()>0 && content.contains("#")) {
-        		final List<String> errors = new ArrayList<>();
+        // Parse the body
+        if (elem.getName().toLowerCase().equals("cfoutput")) {
+            final String content = elem.getContent().getTextExtractor().toString();
+            if (content != null && content.length() > 0 && content.contains("#")) {
+                final List<String> errors = new ArrayList<>();
                 final ANTLRErrorListener errorReporter = new ArrayErrorListener(errors);
                 try {
-                    final CFExpression exp = cfmlParser.parseCFMLExpression(
-                    content, errorReporter);
-	        		if(errors.isEmpty()) {
-	        		     expressions.put("body", exp);
-	        		}
-                }catch(final Exception e) {}
-        	}
-            
+                    final CFExpression exp = cfmlParser.parseCFMLExpression(content, errorReporter);
+                    if (errors.isEmpty()) {
+                        expressions.put("body", exp);
+                    }
+                } catch (final Exception e) {
+                }
+            }
+
         }
         return expressions;
     }
@@ -732,14 +739,15 @@ public class CFLint implements IErrorReporter {
         if (retval.length() < 300 || source == null) {
             return retval;
         }
-        try(final BufferedReader sr = new BufferedReader(new StringReader(source.toString()));) {
+        try (final BufferedReader sr = new BufferedReader(new StringReader(source.toString()));) {
             for (int i = 1; i < line; i++) {
                 @SuppressWarnings("unused")
                 String skip = sr.readLine();
             }
             final String sLine = sr.readLine();
             return sLine == null ? null : sLine.replaceAll("\t", " ");
-        } catch (final Exception e) { }
+        } catch (final Exception e) {
+        }
         return retval.substring(0, 300);
     }
 
@@ -752,8 +760,8 @@ public class CFLint implements IErrorReporter {
             if (processed.contains(checkItem)) {
                 if (!quiet) {
                     System.err.println("Attempt to process expression twice aborted.  This may be a parsing bug in "
-                        + context.getFilename() + " : "
-                        + (expression.getToken() != null ? expression.getToken().getLine() : ""));
+                            + context.getFilename() + " : "
+                            + (expression.getToken() != null ? expression.getToken().getLine() : ""));
                 }
                 return;
             }
@@ -775,7 +783,8 @@ public class CFLint implements IErrorReporter {
                     final CFPropertyStatement propertyStatement = (CFPropertyStatement) expression;
                     CFExpression value = propertyStatement.getPropertyName();
                     if (value == null) {
-                        for (final Entry<CFIdentifier, CFExpression> entry : propertyStatement.getAttributes().entrySet()) {
+                        for (final Entry<CFIdentifier, CFExpression> entry : propertyStatement.getAttributes()
+                                .entrySet()) {
                             if (CF.NAME.equalsIgnoreCase(entry.getKey().getName())) {
                                 value = entry.getValue();
                             }
@@ -840,7 +849,7 @@ public class CFLint implements IErrorReporter {
                 process(((CFForStatement) expression).getCond(), elem, context);
                 process(((CFForStatement) expression).getNext(), elem, context);
                 process(((CFForStatement) expression).getBody(), context);
-                
+
             } else if (expression instanceof CFWhileStatement) {
                 scanExpression(expression, context, elem);
                 process(((CFWhileStatement) expression).getCond(), elem, context);
@@ -877,7 +886,7 @@ public class CFLint implements IErrorReporter {
                 process(cftry.getBody(), context);
                 for (final CFCatchStatement stmt : cftry.getCatchStatements()) {
                     handler.push(CF.CFCATCH);
-                    if(stmt.getVariable()!=null && stmt.getVariable().getName()!=null){
+                    if (stmt.getVariable() != null && stmt.getVariable().getName() != null) {
                         handler.addVariable(stmt.getVariable().getName());
                     }
                     process(stmt.getCatchBody(), context);
@@ -920,9 +929,8 @@ public class CFLint implements IErrorReporter {
                 handler.pop();
             } else if (expression instanceof CFIncludeStatement) {
                 scanExpression(expression, context, elem);
-                final CFExpression includeExpr = ((CFIncludeStatement) expression)
-                        .getTemplate();
-                if(includeExpr instanceof CFStringExpression){
+                final CFExpression includeExpr = ((CFIncludeStatement) expression).getTemplate();
+                if (includeExpr instanceof CFStringExpression) {
                     final List<CFExpression> subExpressions = ((CFStringExpression) includeExpr).getSubExpressions();
                     if (subExpressions.size() == 1 && subExpressions.get(0) instanceof CFLiteral) {
                         final String path = ((CFLiteral) subExpressions.get(0)).getVal();
@@ -944,8 +952,8 @@ public class CFLint implements IErrorReporter {
                                 }
                                 final int line = context.startLine();
                                 final ContextMessage cm = new ContextMessage(PARSE_ERROR, null, null, line);
-                                reportRule(currentElement, "Invalid include file " + expression.getClass(), context, null,
-                                        cm);
+                                reportRule(currentElement, "Invalid include file " + expression.getClass(), context,
+                                        null, cm);
                             }
                         }
                     } else if (strictInclude) {
@@ -960,7 +968,7 @@ public class CFLint implements IErrorReporter {
                 }
             } else {
                 scanExpression(expression, context, elem);
-                for(CFScriptStatement childExpression: expression.decomposeScript()){
+                for (CFScriptStatement childExpression : expression.decomposeScript()) {
                     process(childExpression, context);
                 }
             }
@@ -1020,11 +1028,9 @@ public class CFLint implements IErrorReporter {
 
     /**
      * Register any overrides from multi-line comments.
-     * 
-     * @param context
-     *            The current context.
-     * @param functionToken
-     *            A token that points to the current function
+     *
+     * @param context       The current context.
+     * @param functionToken A token that points to the current function
      */
     protected void registerRuleOverrides(final Context context, final Token functionToken) {
         final String mlText = PrecedingCommentReader.getMultiLine(context, functionToken);
@@ -1039,10 +1045,8 @@ public class CFLint implements IErrorReporter {
     }
 
     /**
-     * @param context
-     *            The current context.
-     * @param expression
-     *            The expression statement to check
+     * @param context    The current context.
+     * @param expression The expression statement to check
      */
     protected void registerRuleOverrides(final Context context, final CFExpressionStatement expression) {
         if (expression.getTokens() == null) {
@@ -1073,10 +1077,8 @@ public class CFLint implements IErrorReporter {
     /**
      * Register any overrides from comment elements before functions/components.
      *
-     * @param context
-     *            The current context.
-     * @param commentElement
-     *            The CFML comment element
+     * @param context        The current context.
+     * @param commentElement The CFML comment element
      */
     protected void applyRuleOverrides(final Context context, final Element commentElement) {
         if (commentElement != null && CF.COMMENT.equals(commentElement.getName())) {
@@ -1091,13 +1093,10 @@ public class CFLint implements IErrorReporter {
     }
 
     /**
-     * 
-     * @param expression
-     *            CF expression
-     * @param elem
-     *            Jericho HTML element
-     * @param oldcontext
-     *            The previous context
+     *
+     * @param expression CF expression
+     * @param elem       Jericho HTML element
+     * @param oldcontext The previous context
      */
     private void process(final CFExpression expression, final Element elem, final Context oldcontext) {
         if (expression != null) {
@@ -1131,7 +1130,7 @@ public class CFLint implements IErrorReporter {
                 process(((CFStructElementExpression) expression).getKey(), elem, assignmentContext);
                 handler.pop();
                 process(((CFStructElementExpression) expression).getValue(), elem, context);
-            }else if (expression instanceof CFVarDeclExpression) {
+            } else if (expression instanceof CFVarDeclExpression) {
                 final Context assignmentContext = context.subContext(elem);
                 assignmentContext.setInAssignmentExpression(true);
                 process(((CFVarDeclExpression) expression).getVar(), elem, assignmentContext);
@@ -1158,49 +1157,52 @@ public class CFLint implements IErrorReporter {
                 for (final CFExpression expr : fullVarExpression.getExpressions()) {
                     if (expr instanceof CFFunctionExpression) {
                         process(expr, elem, subContext);
-                    }
-                    else if (expr instanceof CFMember) {
+                    } else if (expr instanceof CFMember) {
                         process(((CFMember) expr).getExpression(), elem, subContext);
-                    }
-                    else if (expr instanceof CFArrayExpression) {
+                    } else if (expr instanceof CFArrayExpression) {
                         final CFArrayExpression aryExpr = (CFArrayExpression) expr;
                         if (!aryExpr.getElements().isEmpty()) {
                             process(aryExpr.getElements().get(0), elem, subContext);
                         }
                     }
                 }
-            } else if (expression instanceof CFFunctionExpression && tagInfo.isTag(((CFFunctionExpression)expression).getFunctionName())){
-                final CFFunctionExpression functionExpr = (CFFunctionExpression)expression;
+            } else if (expression instanceof CFFunctionExpression
+                    && tagInfo.isTag(((CFFunctionExpression) expression).getFunctionName())) {
+                final CFFunctionExpression functionExpr = (CFFunctionExpression) expression;
                 final StringBuilder sb = new StringBuilder();
                 sb.append("<").append(functionExpr.getFunctionName()).append(" ");
                 for (final CFExpression expr : functionExpr.getArgs()) {
                     if (expr instanceof CFAssignmentExpression) {
                         final CFAssignmentExpression assignExpr = (CFAssignmentExpression) expr;
                         sb.append(assignExpr.getLeft().Decompile(0)).append("=")
-                        .append(assignExpr.getRight().Decompile(0)).append(" ");
+                                .append(assignExpr.getRight().Decompile(0)).append(" ");
                     }
                 }
                 sb.append("/>");
                 final CFMLSource source = new CFMLSource(sb.toString());
                 try {
-                    processStack(source.getChildElements(), " ", 
-                            context.subContextCFML(source.getChildElements().size()>0?source.getChildElements().get(0):null,expression));
-                } catch (CFLintScanException e) { }
-                if(functionExpr.getBody()!=null) {
-                	process(functionExpr.getBody(),context);
+                    processStack(source.getChildElements(), " ",
+                            context.subContextCFML(
+                                    source.getChildElements().size() > 0 ? source.getChildElements().get(0) : null,
+                                    expression));
+                } catch (CFLintScanException e) {
                 }
-            } else if (!(expression instanceof CFNewExpression)){
+                if (functionExpr.getBody() != null) {
+                    process(functionExpr.getBody(), context);
+                }
+            } else if (!(expression instanceof CFNewExpression)) {
                 // Loop into all relevant nested (child) expressions.
-                //  EXCEPT CFNewExpressions.
+                // EXCEPT CFNewExpressions.
                 for (final CFExpression child : expression.decomposeExpression()) {
                     process(child, elem, context.subContextInAssignment(false));
                 }
-            }else{
-                //Process only the right hand side of new expressions
+            } else {
+                // Process only the right hand side of new expressions
                 final CFNewExpression newExpr = (CFNewExpression) expression;
-                for (final CFExpression child : (List<CFExpression>)newExpr.getArgs()) {
-                    if(child instanceof CFAssignmentExpression){
-                        process(((CFAssignmentExpression)child).getRight(), elem, context.subContextInAssignment(false));
+                for (final CFExpression child : (List<CFExpression>) newExpr.getArgs()) {
+                    if (child instanceof CFAssignmentExpression) {
+                        process(((CFAssignmentExpression) child).getRight(), elem,
+                                context.subContextInAssignment(false));
                     }
                 }
             }
@@ -1217,9 +1219,8 @@ public class CFLint implements IErrorReporter {
 
     /**
      * Returns the previous sibling of a given element
-     * 
-     * @param element
-     *            The Jericho HTML element object
+     *
+     * @param element The Jericho HTML element object
      * @return the previous sibling of the given element.
      */
     public static Element getPreviousSibling(final Element element) {
@@ -1241,11 +1242,9 @@ public class CFLint implements IErrorReporter {
 
     /**
      * Check for <!--- CFLINT-DISABLE ---> in the tag hierarchy
-     * 
-     * @param element
-     *            The element to process
-     * @param msgcode
-     *            The message code to check for
+     *
+     * @param element The element to process
+     * @param msgcode The message code to check for
      * @return true if the msgcode is disabled for the given element.
      */
     protected boolean checkForDisabled(final Element element, final String msgcode) {
@@ -1282,17 +1281,19 @@ public class CFLint implements IErrorReporter {
 
     public void reportRule(Element elem, Object currentExpression, final Context context,
             final CFLintScanner pluginParm, final ContextMessage msg) {
-    	//If the message carries a context, use it for generating error info like line number
-    	if(msg.getOriginalContext()!=null && !context.equals(msg.getOriginalContext())) {
-    		reportRule(msg.getOriginalContext().getElement(), currentExpression, msg.getOriginalContext(), pluginParm, msg);
-    		return;
-    	}
+        // If the message carries a context, use it for generating error info like line
+        // number
+        if (msg.getOriginalContext() != null && !context.equals(msg.getOriginalContext())) {
+            reportRule(msg.getOriginalContext().getElement(), currentExpression, msg.getOriginalContext(), pluginParm,
+                    msg);
+            return;
+        }
         final Context pseudoCfmlParent = context.getParent(ContextType.PSEUDO_CFML);
-        if(pseudoCfmlParent!=null && ContextType.PSEUDO_CFML.equals(pseudoCfmlParent.getContextType())){
+        if (pseudoCfmlParent != null && ContextType.PSEUDO_CFML.equals(pseudoCfmlParent.getContextType())) {
             elem = pseudoCfmlParent.getElement();
             currentExpression = pseudoCfmlParent.getPseudoCfmlExpression();
         }
-        final Object expression = msg.getCfExpression() != null? msg.getCfExpression():currentExpression;
+        final Object expression = msg.getCfExpression() != null ? msg.getCfExpression() : currentExpression;
         // If we are processing includes, do NOT report any errors
         if (!includeFileStack.isEmpty()) {
             return;
@@ -1360,42 +1361,47 @@ public class CFLint implements IErrorReporter {
         } else if (elem != null) {
             bldr.setExpression(elem.toString().replaceAll("\r\n", "\n"));
         }
-        //Rebuild the parameter list so that custom configurations are picked up
+        // Rebuild the parameter list so that custom configurations are picked up
         final List<PluginParameter> parameters = new ArrayList<>();
-        for(PluginParameter x: ruleInfo.getParameters()){
-            parameters.add(new PluginParameter(x.getName(),context.getConfiguration().getParameter(plugin,x.getName())));
+        for (PluginParameter x : ruleInfo.getParameters()) {
+            parameters.add(
+                    new PluginParameter(x.getName(), context.getConfiguration().getParameter(plugin, x.getName())));
         }
         bldr.setRuleParameters(parameters);
         if (configuration.includes(ruleInfo.getMessageByCode(msgcode))
                 && !configuration.excludes(ruleInfo.getMessageByCode(msgcode))) {
-            //A bit of a hack to fix the offset issue 
-            //This could be handled better at the source where line and offset are calc'd.
+            // A bit of a hack to fix the offset issue
+            // This could be handled better at the source where line and offset are calc'd.
             int idxOffSet = 1;
-            try{
-                if(lineOffsets != null && msg.getLine()!=null && msg.getOffset() != null && msg.getOffset() >=lineOffsets[msg.getLine()] ){
-                    idxOffSet=0;
+            try {
+                if (lineOffsets != null && msg.getLine() != null && msg.getOffset() != null
+                        && msg.getOffset() >= lineOffsets[msg.getLine()]) {
+                    idxOffSet = 0;
                 }
-            }catch(ArrayIndexOutOfBoundsException e){}
+            } catch (ArrayIndexOutOfBoundsException e) {
+            }
             if (expression instanceof CFExpression) {
                 final BugInfo bugInfo = bldr.build((CFExpression) expression, elem);
                 final Token token = ((CFExpression) expression).getToken();
                 if (!suppressed(bugInfo, token, context)) {
                     bugs.add(bugInfo);
                 }
-                //If the context expression is attached, use the context line and column
-                if( msg.getCfExpression() != null && msg.getCfExpression() != currentExpression){
+                // If the context expression is attached, use the context line and column
+                if (msg.getCfExpression() != null && msg.getCfExpression() != currentExpression) {
                     if (msg.getLine() != null) {
                         bugInfo.setLine(msg.getLine());
                         if (msg.getOffset() != null) {
                             bugInfo.setOffset(msg.getOffset());
-                            try{
+                            try {
                                 bugInfo.setColumn(msg.getOffset() - lineOffsets[msg.getLine() - idxOffSet]);
-                            }catch(ArrayIndexOutOfBoundsException aie){bugInfo.setColumn(0);}
+                            } catch (ArrayIndexOutOfBoundsException aie) {
+                                bugInfo.setColumn(0);
+                            }
                         } else {
                             bugInfo.setOffset(lineOffsets != null ? lineOffsets[msg.getLine() - idxOffSet] : 0);
                             bugInfo.setColumn(0);
                         }
-                    }    
+                    }
                 }
             } else {
                 final BugInfo bug = bldr.build((CFScriptStatement) expression, elem);
@@ -1403,16 +1409,19 @@ public class CFLint implements IErrorReporter {
                     bug.setLine(msg.getLine());
                     if (msg.getOffset() != null) {
                         bug.setOffset(msg.getOffset());
-                        try{
+                        try {
                             bug.setColumn(msg.getOffset() - lineOffsets[msg.getLine() - idxOffSet]);
-                        }catch(ArrayIndexOutOfBoundsException aie){bug.setColumn(0);}
+                        } catch (ArrayIndexOutOfBoundsException aie) {
+                            bug.setColumn(0);
+                        }
                     } else {
                         bug.setOffset(lineOffsets != null ? lineOffsets[msg.getLine() - idxOffSet] : 0);
                         bug.setColumn(0);
                     }
                     bug.setLength(msg.getVariable() != null ? msg.getVariable().length() : 0);
                 }
-                if (!suppressed(bug, expression==null?null:((CFScriptStatement)expression).getToken(), context)) {
+                if (!suppressed(bug, expression == null ? null : ((CFScriptStatement) expression).getToken(),
+                        context)) {
                     bugs.add(bug);
                 }
             }
@@ -1420,15 +1429,15 @@ public class CFLint implements IErrorReporter {
     }
 
     /*
-     * Look for a suppress comment on the same line. cflint:line - suppresses
-     * any messages on the same line cflint:MESSAGE_CODE - suppresses any
-     * message matching that code
+     * Look for a suppress comment on the same line. cflint:line - suppresses any
+     * messages on the same line cflint:MESSAGE_CODE - suppresses any message
+     * matching that code
      */
     protected boolean suppressed(final BugInfo bugInfo, final Token token, final Context context) {
         if (context == null || context.isSuppressed(bugInfo)) {
             return true;
         }
-        if(token == null){
+        if (token == null) {
             return false;
         }
         final Iterable<Token> tokens = context.afterTokens(token);
@@ -1471,7 +1480,7 @@ public class CFLint implements IErrorReporter {
 
     public void setAllowedExtensions(final List<String> allowedExtensions) {
         this.allowedExtensions.clear();
-        if(allowedExtensions != null){
+        if (allowedExtensions != null) {
             this.allowedExtensions.addAll(allowedExtensions);
         }
     }
@@ -1586,17 +1595,19 @@ public class CFLint implements IErrorReporter {
         final Context context = new Context(currentFile, currentElement, null, true, null, null);
         if (currentElement != null) {
             startOffset = context.offset();
-            if(context.startLine() != 1) {
+            if (context.startLine() != 1) {
                 startLine = currentElement.getSource().getRow(startOffset) - 1;
             }
         }
         if (offendingSymbol instanceof Token && re != null) {
-            // grab the first non-comment previous token, which is actually the cause of the syntax error theoretically
-            CommonTokenStream tokenStream = (CommonTokenStream)recognizer.getInputStream();
-            Token previousToken = tokenStream.get(re.getOffendingToken().getTokenIndex()-1);
+            // grab the first non-comment previous token, which is actually the cause of the
+            // syntax error theoretically
+            CommonTokenStream tokenStream = (CommonTokenStream) recognizer.getInputStream();
+            Token previousToken = tokenStream.get(re.getOffendingToken().getTokenIndex() - 1);
             if (previousToken != null) {
-                while(previousToken.getChannel() == Token.HIDDEN_CHANNEL && tokenStream.get(previousToken.getTokenIndex()-1) != null) {
-                    previousToken = tokenStream.get(previousToken.getTokenIndex()-1);
+                while (previousToken.getChannel() == Token.HIDDEN_CHANNEL
+                        && tokenStream.get(previousToken.getTokenIndex() - 1) != null) {
+                    previousToken = tokenStream.get(previousToken.getTokenIndex() - 1);
                 }
                 line = previousToken.getLine();
                 offset = previousToken.getStopIndex();
@@ -1608,7 +1619,7 @@ public class CFLint implements IErrorReporter {
                 expression = expression.substring(1, 40) + "...";
             }
         }
-        offset +=  startOffset;
+        offset += startOffset;
         line += startLine;
         if (recognizer instanceof Parser && ((Parser) recognizer).isExpectedToken(CFSCRIPTParser.SEMICOLON)) {
             final ContextMessage cm = new ContextMessage(MISSING_SEMI, expression, null, line, offset);
@@ -1656,10 +1667,9 @@ public class CFLint implements IErrorReporter {
     public void setStrictIncludes(final boolean strictInclude) {
         this.strictInclude = strictInclude;
     }
-    
-    public void setEnvironmentName(String environmentName) {
-		this.environmentName = environmentName==null?"":environmentName.trim();
-	}
 
+    public void setEnvironmentName(String environmentName) {
+        this.environmentName = environmentName == null ? "" : environmentName.trim();
+    }
 
 }

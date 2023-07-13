@@ -71,13 +71,12 @@ public class JSONOutput extends StructuredOutput {
                 outputCloseIssue(jg);
             }
         }
-        
+
         outputCloseIssues(jg);
         outputCounts(stats, counts, jg);
         outputEnd(jg);
         writer.close();
     }
-
 
     /**
      * Output JSON start of global object and version info.
@@ -159,12 +158,14 @@ public class JSONOutput extends StructuredOutput {
     /**
      * Output JSON count statistics.
      */
-    private void outputCounts(final CFLintStats stats, final BugCounts counts, final JsonGenerator jg) throws IOException {
+    private void outputCounts(final CFLintStats stats, final BugCounts counts, final JsonGenerator jg)
+            throws IOException {
         // start counts object
         jg.writeFieldName("counts");
         jg.writeStartObject();
         jg.writeNumberField("totalFiles", stats.getFileCount());
-        // totalLines has to be separated into writing the field name and the number - .writeNumberField() can't deal with BigInt
+        // totalLines has to be separated into writing the field name and the number -
+        // .writeNumberField() can't deal with BigInt
         jg.writeFieldName("totalLines");
         jg.writeNumber(stats.getTotalLines());
         // start countByCode array

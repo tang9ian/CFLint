@@ -18,7 +18,7 @@ public class StackHandler {
 
     public StackHandler() {
         super();
-        //Scopes
+        // Scopes
         excludes.add(CF.VARIABLES.toUpperCase());
         excludes.add(CF.ARGUMENTS.toUpperCase());
         excludes.add(CF.SUPER.toUpperCase());
@@ -44,15 +44,17 @@ public class StackHandler {
     public void addVariable(final String name) {
         varStack.peek().getVariables().add(name.toUpperCase());
     }
+
     public void addVariables(final List<String> names) {
-    	if(names != null){
-	    	for(String name: names){
-	    		varStack.peek().getVariables().add(name.toUpperCase());
-	    	}
-    	}
+        if (names != null) {
+            for (String name : names) {
+                varStack.peek().getVariables().add(name.toUpperCase());
+            }
+        }
     }
+
     public void addQueryColumnSet(final String name, final List<String> columns) {
-        varStack.peek().getQueryColumns().put(name.toUpperCase(),columns);
+        varStack.peek().getQueryColumns().put(name.toUpperCase(), columns);
     }
 
     public void addArgument(final String name) {
@@ -73,9 +75,7 @@ public class StackHandler {
 
     public Object getPluginVar(final Class<?> clazz, final String var) {
         final String key = clazz.getName() + "_" + var;
-        final Iterator<Stack> iter = varStack.iterator();
-        while (iter.hasNext()) {
-            final Stack vars = iter.next();
+        for (Stack vars : varStack) {
             if (vars.getPluginvariables().containsKey(key)) {
                 return vars.getPluginvariables().get(key);
             }
@@ -87,9 +87,7 @@ public class StackHandler {
     public Collection<Object> getPluginAllVars(final Class<?> clazz, final String var) {
         final List<Object> retval = new ArrayList<>();
         final String key = clazz.getName() + "_" + var;
-        final Iterator<Stack> iter = varStack.iterator();
-        while (iter.hasNext()) {
-            final Stack vars = iter.next();
+        for (Stack vars : varStack) {
             if (vars.getPluginvariables().containsKey(key)) {
                 final Object value = vars.getPluginvariables().get(key);
                 if (value instanceof Collection<?>) {
@@ -108,18 +106,17 @@ public class StackHandler {
     }
 
     public boolean isVariable(final String name) {
-        final Iterator<Stack> iter = varStack.iterator();
-        while (iter.hasNext()) {
-            final Stack vars = iter.next();
+        for (Stack vars : varStack) {
             if (vars.getVariables().contains(name.toUpperCase())) {
                 return true;
             }
         }
         return false;
     }
+
     /* basically a property */
     public boolean isTopVariable(final String name) {
-        if(varStack.size()>0) {
+        if (varStack.size() > 0) {
             final Stack vars = varStack.peekFirst();
             if (vars.getVariables().contains(name.toUpperCase())) {
                 return true;
@@ -127,24 +124,23 @@ public class StackHandler {
         }
         return false;
     }
-    //Do not look in the top stack (global vars)
+
+    // Do not look in the top stack (global vars)
     public boolean isLocalVariable(final String name) {
         final Iterator<Stack> iter = varStack.iterator();
         while (iter.hasNext()) {
             final Stack vars = iter.next();
-            if(iter.hasNext()) {
-	            if (vars.getVariables().contains(name.toUpperCase())) {
-	                return true;
-	            }
+            if (iter.hasNext()) {
+                if (vars.getVariables().contains(name.toUpperCase())) {
+                    return true;
+                }
             }
         }
         return false;
     }
-    
+
     public List<String> getQueryColumns(final String name) {
-        final Iterator<Stack> iter = varStack.iterator();
-        while (iter.hasNext()) {
-            final Stack vars = iter.next();
+        for (Stack vars : varStack) {
             if (vars.getQueryColumns().containsKey(name.toUpperCase())) {
                 return vars.getQueryColumns().get(name.toUpperCase());
             }
@@ -153,9 +149,7 @@ public class StackHandler {
     }
 
     public boolean isArgument(final String name) {
-        final Iterator<Stack> iter = varStack.iterator();
-        while (iter.hasNext()) {
-            final Stack vars = iter.next();
+        for (Stack vars : varStack) {
             if (vars.getArguments().contains(name.toUpperCase())) {
                 return true;
             }
@@ -164,17 +158,12 @@ public class StackHandler {
     }
 
     public boolean checkVariable(final String name) {
-    	if (excludes.contains(name.toUpperCase().split("\\.")[0])) {
+        if (excludes.contains(name.toUpperCase().split("\\.")[0])) {
             return true;
         }
-        final Iterator<Stack> iter = varStack.iterator();
-        while (iter.hasNext()) {
-            final Stack vars = iter.next();
+        for (Stack vars : varStack) {
             // Report only once per scope level
-            if (vars.getReported().contains(name.toUpperCase())) {
-                return true;
-            }
-            if (vars.getVariables().contains(name.toUpperCase())) {
+            if (vars.getReported().contains(name.toUpperCase()) || vars.getVariables().contains(name.toUpperCase())) {
                 return true;
             }
             if (!isVariable(name) && vars.getArguments().contains(name.toUpperCase())) {
@@ -191,7 +180,7 @@ public class StackHandler {
 
     public static class Stack {
         private Set<String> variables = new HashSet<>();
-        private Map<String,List<String>> queryColumns = new HashMap<>();
+        private Map<String, List<String>> queryColumns = new HashMap<>();
         private Set<String> reported = new HashSet<>();
         private Map<String, Object> pluginvariables = new HashMap<>();
         private Set<String> arguments = new HashSet<>();
@@ -215,10 +204,10 @@ public class StackHandler {
         }
 
         public Map<String, List<String>> getQueryColumns() {
-			return queryColumns;
-		}
+            return queryColumns;
+        }
 
-		public Set<String> getArguments() {
+        public Set<String> getArguments() {
             return arguments;
         }
 

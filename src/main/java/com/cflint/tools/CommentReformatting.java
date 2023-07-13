@@ -22,18 +22,18 @@ public class CommentReformatting {
                 if (!stack.isEmpty()) {
                     int en_start = endpos;
                     int en_end = endpos + 4;
-                    while (sb.charAt(en_start-1)=='-'){
+                    while (sb.charAt(en_start - 1) == '-') {
                         en_start--;
                     }
                     int st_start = pos;
                     int st_end = pos + 3;
-                    while (sb.charAt(st_end+1)=='-'){
+                    while (sb.charAt(st_end + 1) == '-') {
                         st_end++;
                     }
                     st_end++;
-                    if(en_start<=st_end){
+                    if (en_start <= st_end) {
                         sb.replace(st_start, en_end, "<!--a-->");
-                    }else {
+                    } else {
                         sb.replace(en_start, en_end, "-->");
                         sb.replace(st_start, st_end, "<!--");
                     }

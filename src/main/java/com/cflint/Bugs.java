@@ -13,7 +13,7 @@ public class Bugs {
      * Code.
      */
     public static final String CODE = "code";
-    
+
     /**
      * ID.
      */
@@ -30,7 +30,7 @@ public class Bugs {
     public static final String SEVERITY = "severity";
 
     private Bugs() {
-          throw new IllegalStateException("Bugs utility class");
-        }
+        throw new IllegalStateException("Bugs utility class");
+    }
 
 }

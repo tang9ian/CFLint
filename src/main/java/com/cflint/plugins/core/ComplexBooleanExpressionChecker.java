@@ -8,7 +8,7 @@ import cfml.parsing.cfscript.CFBinaryExpression;
 import cfml.parsing.cfscript.CFExpression;
 
 public class ComplexBooleanExpressionChecker extends CFLintScannerAdapter {
-     protected int complexThreshold = 10;
+    protected int complexThreshold = 10;
 
     @Override
     public void expression(final CFExpression expression, final Context context, final BugList bugs) {
@@ -50,7 +50,8 @@ public class ComplexBooleanExpressionChecker extends CFLintScannerAdapter {
         return count;
     }
 
-    public void complexBooleanExpression(final int lineNo, final int offset, final Context context, final BugList bugs) {
+    public void complexBooleanExpression(final int lineNo, final int offset, final Context context,
+            final BugList bugs) {
         context.addMessage("COMPLEX_BOOLEAN_CHECK", null, this, lineNo, offset);
     }
 

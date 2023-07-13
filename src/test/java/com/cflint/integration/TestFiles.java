@@ -62,8 +62,8 @@ public class TestFiles {
     @Test
     public void test() throws IOException, CFLintScanException, CFLintConfigurationException {
         String inputString = FileUtil.loadFile(sourceFile);
-        //Normalize EOL
-        if(inputString != null)
+        // Normalize EOL
+        if (inputString != null)
             inputString = inputString.replaceAll("\\r\\n?", "\n");
         final File expectedFile = new File(sourceFile.getPath().replaceAll("\\.cf.", ".expected.txt"));
         final String expectedFileText = expectedFile.exists() ? FileUtil.loadFile(expectedFile) : null;
@@ -109,8 +109,8 @@ public class TestFiles {
 
     @Parameterized.Parameters(name = "{1}")
     public static Collection<Object[]> primeNumbers() throws URISyntaxException, IOException {
-        final ArrayList<Object[]> retval = new ArrayList<Object[]>();
-        final List<File> listing = new ArrayList<File>();
+        final ArrayList<Object[]> retval = new ArrayList<>();
+        final List<File> listing = new ArrayList<>();
         final File baseFolder = new File("src/test/resources/com/cflint/tests");
         fillResourceListing(baseFolder, listing);
         for (final File s : listing) {

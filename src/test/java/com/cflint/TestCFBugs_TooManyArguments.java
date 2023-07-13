@@ -66,8 +66,8 @@ public class TestCFBugs_TooManyArguments {
         final String cfcSrc = "component {\r\n"
                 + "public void function someFunction(argumentOne, argumentTwo, argumentThree,"
                 + "argumentFour, argumentFive, argumentSix, argumentSeven,"
-                + "argumentEight, argumentNine, intargumentTen, argumentEleven) {\r\n" + "	var a = 1;\r\n"
-                + "}\r\n" + "}";
+                + "argumentEight, argumentNine, intargumentTen, argumentEleven) {\r\n" + "	var a = 1;\r\n" + "}\r\n"
+                + "}";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(1, result.size());

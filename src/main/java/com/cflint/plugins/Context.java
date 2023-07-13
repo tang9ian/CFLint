@@ -37,14 +37,14 @@ public class Context {
     private boolean inStructKeyExpression;
 
     public boolean isInStructKeyExpression() {
-		return inStructKeyExpression;
-	}
+        return inStructKeyExpression;
+    }
 
-	public void setInStructKeyExpression(boolean inStructKeyExpression) {
-		this.inStructKeyExpression = inStructKeyExpression;
-	}
+    public void setInStructKeyExpression(boolean inStructKeyExpression) {
+        this.inStructKeyExpression = inStructKeyExpression;
+    }
 
-	private boolean inComponent;
+    private boolean inComponent;
     private final StackHandler callStack;
     private final CommonTokenStream tokens;
     private final List<ContextMessage> messages = new ArrayList<>();
@@ -53,7 +53,7 @@ public class Context {
     final private CFLintConfiguration configuration;
 
     public Context(final String filename, final Element element, final CFIdentifier functionName,
-            final boolean inAssignmentExpression, final StackHandler handler,CFLintConfiguration configuration) {
+            final boolean inAssignmentExpression, final StackHandler handler, CFLintConfiguration configuration) {
         super();
         this.filename = filename;
         this.element = element;
@@ -61,11 +61,12 @@ public class Context {
         this.inAssignmentExpression = inAssignmentExpression;
         this.callStack = handler;
         this.tokens = null;
-        this.configuration=configuration;
+        this.configuration = configuration;
     }
 
     public Context(final String filename, final Element element, final String functionName,
-            final boolean inAssignmentExpression, final StackHandler handler, CommonTokenStream tokens,CFLintConfiguration configuration) {
+            final boolean inAssignmentExpression, final StackHandler handler, CommonTokenStream tokens,
+            CFLintConfiguration configuration) {
         super();
         this.filename = filename;
         this.element = element;
@@ -73,7 +74,7 @@ public class Context {
         this.inAssignmentExpression = inAssignmentExpression;
         this.callStack = handler;
         this.tokens = tokens;
-        this.configuration=configuration;
+        this.configuration = configuration;
     }
 
     public void setInAssignmentExpression(boolean inAssignmentExpression) {
@@ -185,19 +186,20 @@ public class Context {
 
     public void addMessage(final String messageCode, final String variable, final CFLintScanner source,
             final Integer line, final Integer offset) {
-        messages.add(new ContextMessage(messageCode, variable, source, line, offset,null));
-    }
-    public void addMessage(final String messageCode, final String variable, final CFLintScanner source,
-            final Integer line, final Integer offset, final CFExpression cfExpression) {
-        messages.add(new ContextMessage(messageCode, variable, source, line, offset,cfExpression));
-    }
-    public void addMessage(final String messageCode, final String variable, final CFLintScanner source,
-            final Integer line, final Integer offset, final CFExpression cfExpression, final Context originalContext) {
-        messages.add(new ContextMessage(messageCode, variable, source, line, offset,cfExpression,originalContext));
+        messages.add(new ContextMessage(messageCode, variable, source, line, offset, null));
     }
 
-    public void addMessage(final String messageCode, final String variable, final Integer line,
-            final Integer offset) {
+    public void addMessage(final String messageCode, final String variable, final CFLintScanner source,
+            final Integer line, final Integer offset, final CFExpression cfExpression) {
+        messages.add(new ContextMessage(messageCode, variable, source, line, offset, cfExpression));
+    }
+
+    public void addMessage(final String messageCode, final String variable, final CFLintScanner source,
+            final Integer line, final Integer offset, final CFExpression cfExpression, final Context originalContext) {
+        messages.add(new ContextMessage(messageCode, variable, source, line, offset, cfExpression, originalContext));
+    }
+
+    public void addMessage(final String messageCode, final String variable, final Integer line, final Integer offset) {
         messages.add(new ContextMessage(messageCode, variable, line, offset));
     }
 
@@ -211,20 +213,20 @@ public class Context {
         final Context originalContext;
 
         public Context getOriginalContext() {
-			return originalContext;
-		}
+            return originalContext;
+        }
 
-		public ContextMessage(final String messageCode, final String variable) {
+        public ContextMessage(final String messageCode, final String variable) {
             super();
             this.messageCode = messageCode;
             this.variable = variable;
             this.source = null;
             this.cfExpression = null;
-            this.originalContext=null;
+            this.originalContext = null;
         }
 
-        public ContextMessage(final String messageCode, final String variable, CFLintScanner source,
-                final Integer line, final Integer offset, final CFExpression cfExpression) {
+        public ContextMessage(final String messageCode, final String variable, CFLintScanner source, final Integer line,
+                final Integer offset, final CFExpression cfExpression) {
             super();
             this.messageCode = messageCode;
             this.variable = variable;
@@ -232,10 +234,11 @@ public class Context {
             this.line = line;
             this.offset = offset;
             this.cfExpression = cfExpression;
-            this.originalContext=null;
+            this.originalContext = null;
         }
-        public ContextMessage(final String messageCode, final String variable, CFLintScanner source,
-                final Integer line, final Integer offset, final CFExpression cfExpression,final Context originalContext) {
+
+        public ContextMessage(final String messageCode, final String variable, CFLintScanner source, final Integer line,
+                final Integer offset, final CFExpression cfExpression, final Context originalContext) {
             super();
             this.messageCode = messageCode;
             this.variable = variable;
@@ -243,10 +246,11 @@ public class Context {
             this.line = line;
             this.offset = offset;
             this.cfExpression = cfExpression;
-            this.originalContext=originalContext;
+            this.originalContext = originalContext;
         }
-        public ContextMessage(final String messageCode, final String variable, CFLintScanner source,
-                final Integer line, final Integer offset) {
+
+        public ContextMessage(final String messageCode, final String variable, CFLintScanner source, final Integer line,
+                final Integer offset) {
             super();
             this.messageCode = messageCode;
             this.variable = variable;
@@ -254,10 +258,11 @@ public class Context {
             this.line = line;
             this.offset = offset;
             this.cfExpression = null;
-            this.originalContext=null;
+            this.originalContext = null;
         }
 
-        public ContextMessage(final String messageCode, final String variable, final Integer line, final Integer offset) {
+        public ContextMessage(final String messageCode, final String variable, final Integer line,
+                final Integer offset) {
             this(messageCode, variable);
             this.line = line;
             this.offset = offset;
@@ -280,7 +285,7 @@ public class Context {
         }
 
         public Integer getOffset() {
-        	return offset;
+            return offset;
         }
 
         public CFExpression getCfExpression() {
@@ -288,45 +293,48 @@ public class Context {
         }
     }
 
-    public Context subContext(final Element elem,final CommonTokenStream tokens) {
+    public Context subContext(final Element elem, final CommonTokenStream tokens) {
         final Context context2 = new Context(getFilename(), elem == null ? this.element : elem, getFunctionName(),
-                isInAssignmentExpression(), callStack, tokens,configuration);
+                isInAssignmentExpression(), callStack, tokens, configuration);
         context2.setInComponent(isInComponent());
         context2.parent = this;
-        context2.componentName=componentName;
-        context2.inStructKeyExpression=inStructKeyExpression;
+        context2.componentName = componentName;
+        context2.inStructKeyExpression = inStructKeyExpression;
         return context2;
     }
+
     public Context subContext(final Element elem) {
         final Context context2 = new Context(getFilename(), elem == null ? this.element : elem, getFunctionName(),
-                isInAssignmentExpression(), callStack, tokens,configuration);
+                isInAssignmentExpression(), callStack, tokens, configuration);
         context2.setInComponent(isInComponent());
         context2.parent = this;
-        context2.componentName=componentName;
-        context2.inStructKeyExpression=inStructKeyExpression;
+        context2.componentName = componentName;
+        context2.inStructKeyExpression = inStructKeyExpression;
         return context2;
     }
+
     public Context subContextCFML(final Element elem, final CFExpression pseudoCfmlExpression) {
-        final Context context2 = new Context(getFilename(), elem, getFunctionName(),
-                isInAssignmentExpression(), callStack, tokens,configuration);
+        final Context context2 = new Context(getFilename(), elem, getFunctionName(), isInAssignmentExpression(),
+                callStack, tokens, configuration);
         this.pseudoCfmlExpression = pseudoCfmlExpression;
-        this.contextType=ContextType.PSEUDO_CFML;
+        this.contextType = ContextType.PSEUDO_CFML;
         context2.setInComponent(isInComponent());
         context2.parent = this;
-        context2.componentName=componentName;
-        context2.inStructKeyExpression=inStructKeyExpression;
+        context2.componentName = componentName;
+        context2.inStructKeyExpression = inStructKeyExpression;
         return context2;
     }
-    
+
     public Context subContextInAssignment() {
         return subContextInAssignment(true);
     }
+
     public Context subContextInAssignment(boolean assignment) {
-        final Context context2 = new Context(getFilename(), this.element, getFunctionName(),
-                isInAssignmentExpression(), callStack, tokens,configuration);
+        final Context context2 = new Context(getFilename(), this.element, getFunctionName(), isInAssignmentExpression(),
+                callStack, tokens, configuration);
         context2.setInComponent(isInComponent());
         context2.parent = this;
-        context2.componentName=componentName;
+        context2.componentName = componentName;
         context2.setInAssignmentExpression(assignment);
         return context2;
     }
@@ -346,7 +354,7 @@ public class Context {
             } else if (element.getName().equalsIgnoreCase(CF.CFSET)) {
                 return element.getStartTag().getTagContent().getBegin() + 1;
             }
-            
+
             return element.getBegin();
         } else {
             return 0;
@@ -435,9 +443,9 @@ public class Context {
     }
 
     /**
-     * 
-     * @param type      the type of context to retrieve from the parent tree
-     * @return          the parent context of the given type OR the root context if none
+     *
+     * @param type the type of context to retrieve from the parent tree
+     * @return the parent context of the given type OR the root context if none
      *         matches
      */
     public Context getParent(ContextType type) {
@@ -473,16 +481,16 @@ public class Context {
 
     public void setContextType(ContextType contextType) {
         this.contextType = contextType;
-        if(contextType == ContextType.COMPONENT && componentName==null){
+        if (contextType == ContextType.COMPONENT && componentName == null) {
             assignComponentNameFromFile();
         }
     }
 
-	private void assignComponentNameFromFile() {
-		if(filename != null && filename.trim().length()>0){
-		    componentName= new File(filename.trim()).getName().replaceAll("[.]\\w+", "");
-		}
-	}
+    private void assignComponentNameFromFile() {
+        if (filename != null && filename.trim().length() > 0) {
+            componentName = new File(filename.trim()).getName().replaceAll("[.]\\w+", "");
+        }
+    }
 
     public CFLintConfiguration getConfiguration() {
         return configuration;

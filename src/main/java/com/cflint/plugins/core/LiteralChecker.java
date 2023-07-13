@@ -29,9 +29,9 @@ public class LiteralChecker extends CFLintScannerAdapter {
 
     @Override
     public void expression(final CFExpression expression, final Context context, final BugList bugs) {
-        final String repeatThreshold = context.getConfiguration().getParameter(this,"maximum");
-        final String maxWarnings = context.getConfiguration().getParameter(this,"maxWarnings");
-        final String warningScope = context.getConfiguration().getParameter(this,"warningScope");
+        final String repeatThreshold = context.getConfiguration().getParameter(this, "maximum");
+        final String maxWarnings = context.getConfiguration().getParameter(this, "maxWarnings");
+        final String warningScope = context.getConfiguration().getParameter(this, "warningScope");
 
         if (repeatThreshold != null) {
             threshold = Integer.parseInt(repeatThreshold);
@@ -53,9 +53,9 @@ public class LiteralChecker extends CFLintScannerAdapter {
             final int offset = literal.getOffset() + context.offset();
 
             if ((warningScope == null || "global".equals(warningScope)) && !context.isInFunction()) {
-                literalCount(name, lineNo, offset, globalLiterals, true, context, bugs,expression);
+                literalCount(name, lineNo, offset, globalLiterals, true, context, bugs, expression);
             } else if ("local".equals(warningScope) && context.isInFunction()) {
-                literalCount(name, lineNo, offset, functionListerals, false, context, bugs,expression);
+                literalCount(name, lineNo, offset, functionListerals, false, context, bugs, expression);
             }
         }
     }
@@ -67,8 +67,9 @@ public class LiteralChecker extends CFLintScannerAdapter {
         }
     }
 
-    protected void literalCount(final String name, final int lineNo, final int offset, final Map<String, Integer> literals,
-                                final boolean global, final Context context, final BugList bugs, CFExpression expression) {
+    protected void literalCount(final String name, final int lineNo, final int offset,
+            final Map<String, Integer> literals, final boolean global, final Context context, final BugList bugs,
+            CFExpression expression) {
         int count = 1;
 
         if (literals.get(name) == null) {
@@ -81,9 +82,9 @@ public class LiteralChecker extends CFLintScannerAdapter {
 
         if (count > threshold && (warningThreshold == -1 || (count - threshold) <= warningThreshold)) {
             if (global) {
-                magicGlobalValue(name, lineNo, offset, context, bugs,expression);
+                magicGlobalValue(name, lineNo, offset, context, bugs, expression);
             } else {
-                magicLocalValue(name, lineNo, offset, context, bugs,expression);
+                magicLocalValue(name, lineNo, offset, context, bugs, expression);
             }
         }
     }
@@ -93,37 +94,35 @@ public class LiteralChecker extends CFLintScannerAdapter {
     }
 
     /**
-     * Checks if the literal is a special case that should not fire the literal checker rule
+     * Checks if the literal is a special case that should not fire the literal
+     * checker rule
      *
      * @param name
      * @return
      */
     private boolean isSpecial(final String name) {
-        //Empty literals do not flag
-        if (name == null || name.length() == 0) {
+        // Empty literals do not flag
+
+        // Punctuation literals excepted (Look for absence of a word character)
+        // Exclude datatype for cfquery/cfproc
+        if (name == null || name.length() == 0 || !name.matches(".*\\w.*") || name.startsWith("cf_sql_")) {
             return true;
         }
-        //Punctuation literals excepted (Look for absence of a word character)
-        if (!name.matches(".*\\w.*")) {
-            return true;
-        }
-        //Exclude datatype for cfquery/cfproc
-        if (name.startsWith("cf_sql_")) {
-            return true;
-        }
-        //Check ignore words list from the configuration
+        // Check ignore words list from the configuration
         return getParameterAsList("ignoreWords").contains(name.toLowerCase());
     }
 
-    public void magicLocalValue(final String name, final int lineNo, final int offset, final Context context, final BugList bugs, CFExpression expression) {
+    public void magicLocalValue(final String name, final int lineNo, final int offset, final Context context,
+            final BugList bugs, CFExpression expression) {
         if (!isSpecial(name.toLowerCase())) {
-            context.addUniqueMessage("LOCAL_LITERAL_VALUE_USED_TOO_OFTEN", name, this, lineNo, offset,expression);
+            context.addUniqueMessage("LOCAL_LITERAL_VALUE_USED_TOO_OFTEN", name, this, lineNo, offset, expression);
         }
     }
 
-    public void magicGlobalValue(final String name, final int lineNo, final int offset, final Context context, final BugList bugs, CFExpression expression) {
+    public void magicGlobalValue(final String name, final int lineNo, final int offset, final Context context,
+            final BugList bugs, CFExpression expression) {
         if (!isSpecial(name.toLowerCase())) {
-            context.addUniqueMessage("GLOBAL_LITERAL_VALUE_USED_TOO_OFTEN", name, this, lineNo, offset,expression);
+            context.addUniqueMessage("GLOBAL_LITERAL_VALUE_USED_TOO_OFTEN", name, this, lineNo, offset, expression);
         }
     }
 }

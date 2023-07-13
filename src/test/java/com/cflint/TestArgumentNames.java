@@ -19,7 +19,9 @@ public class TestArgumentNames {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigBuilder configBuilder = new ConfigBuilder().include("ARGUMENT_MISSING_NAME","ARGUMENT_INVALID_NAME","ARGUMENT_ALLCAPS_NAME","ARGUMENT_TOO_SHORT","ARGUMENT_TOO_LONG","ARGUMENT_TOO_WORDY","ARGUMENT_IS_TEMPORARY","ARGUMENT_HAS_PREFIX_OR_POSTFIX");
+        final ConfigBuilder configBuilder = new ConfigBuilder().include("ARGUMENT_MISSING_NAME",
+                "ARGUMENT_INVALID_NAME", "ARGUMENT_ALLCAPS_NAME", "ARGUMENT_TOO_SHORT", "ARGUMENT_TOO_LONG",
+                "ARGUMENT_TOO_WORDY", "ARGUMENT_IS_TEMPORARY", "ARGUMENT_HAS_PREFIX_OR_POSTFIX");
         cfBugs = new CFLintAPI(configBuilder.build());
     }
 
@@ -50,8 +52,8 @@ public class TestArgumentNames {
     @Test
     public void invalidCharsInNameTag() throws CFLintScanException {
         final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
-                + "	<cfargument name=\"$name\">\r\n" + "	<cfargument name=\"last$name\">\r\n"
-                + "</cffunction>\r\n" + "</cfcomponent>";
+                + "	<cfargument name=\"$name\">\r\n" + "	<cfargument name=\"last$name\">\r\n" + "</cffunction>\r\n"
+                + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(tagSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(2, result.size());
@@ -63,9 +65,8 @@ public class TestArgumentNames {
 
     @Test
     public void nameTooShortTag() throws CFLintScanException {
-        final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
-                + "	<cfargument name=\"a\">\r\n" + "	<cfargument name=\"b\">\r\n" + "</cffunction>\r\n"
-                + "</cfcomponent>";
+        final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n" + "	<cfargument name=\"a\">\r\n"
+                + "	<cfargument name=\"b\">\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(tagSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(2, result.size());
@@ -78,8 +79,7 @@ public class TestArgumentNames {
     @Test
     public void nameTooLongTag() throws CFLintScanException {
         final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
-                + "	<cfargument name=\"isaveryveryverylongargumentname\">\r\n" + "</cffunction>\r\n"
-                + "</cfcomponent>";
+                + "	<cfargument name=\"isaveryveryverylongargumentname\">\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(tagSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(1, result.size());
@@ -103,8 +103,8 @@ public class TestArgumentNames {
         final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
                 + "	<cfargument name=\"temp\">\r\n" + "	<cfargument name=\"obj\">\r\n"
                 + "	<cfargument name=\"struct\">\r\n" + "	<cfargument name=\"tempName\">\r\n"
-                + "	<cfargument name=\"nameObj\">\r\n" + "	<cfargument name=\"nameString\">\r\n"
-                + "</cffunction>\r\n" + "</cfcomponent>";
+                + "	<cfargument name=\"nameObj\">\r\n" + "	<cfargument name=\"nameString\">\r\n" + "</cffunction>\r\n"
+                + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(tagSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().get("ARGUMENT_IS_TEMPORARY");
         assertEquals(6, result.size());
@@ -180,7 +180,6 @@ public class TestArgumentNames {
         assertEquals("ARGUMENT_INVALID_NAME", result.get(1).getMessageCode());
         assertEquals(2, result.get(1).getLine());
     }
-
 
     @Test
     public void nameTooShortScript() throws CFLintScanException {

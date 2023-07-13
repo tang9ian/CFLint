@@ -11,13 +11,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class TestConfigUtils {
 
-    final String input1 = "{\r\n" + "			  \"rule\" : [ ],\r\n"
-            + "			  \"excludes\" : [ ],\r\n" + "			  \"includes\" : [ {\r\n"
-            + "			    \"code\" : \"FUNCTION_HINT_MISSING\"\r\n" + "			  } ],\r\n"
-            + "			  \"inheritParent\" : false\r\n" + "			}";
-    final String input2 = "{\r\n" + "			  \"excludes\" : [ ],\r\n"
-            + "			  \"xyzzy\" : false,\r\n" + "			  \"inheritParent\" : false,\r\n"
-            + "			}";
+    final String input1 = "{\r\n" + "			  \"rule\" : [ ],\r\n" + "			  \"excludes\" : [ ],\r\n"
+            + "			  \"includes\" : [ {\r\n" + "			    \"code\" : \"FUNCTION_HINT_MISSING\"\r\n"
+            + "			  } ],\r\n" + "			  \"inheritParent\" : false\r\n" + "			}";
+    final String input2 = "{\r\n" + "			  \"excludes\" : [ ],\r\n" + "			  \"xyzzy\" : false,\r\n"
+            + "			  \"inheritParent\" : false,\r\n" + "			}";
 
     @Test
     public void testUnmarshalJson() throws JsonParseException, JsonMappingException, IOException {

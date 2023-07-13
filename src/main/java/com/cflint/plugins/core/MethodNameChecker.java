@@ -1,8 +1,8 @@
 package com.cflint.plugins.core;
 
+import com.cflint.BugList;
 import com.cflint.CF;
 import com.cflint.config.CFLintConfiguration;
-import com.cflint.BugList;
 import com.cflint.plugins.CFLintScannerAdapter;
 import com.cflint.plugins.Context;
 
@@ -32,7 +32,6 @@ public class MethodNameChecker extends CFLintScannerAdapter {
      */
     private int maxMethodWords = ValidName.MAX_METHOD_WORDS;
 
-
     /**
      * Parse a CFScript function declaration to see if the function name is invalid.
      */
@@ -60,33 +59,31 @@ public class MethodNameChecker extends CFLintScannerAdapter {
     /**
      * Parse rule parameters.
      *
-     * Parameters include:
-     * - minimum length of valid name
-     * - maximum length of valid name
-     * - maximum number of words in a camel case name
+     * Parameters include: - minimum length of valid name - maximum length of valid
+     * name - maximum number of words in a camel case name
      *
      * See @ValidName for defaults.
      */
-    private void parseParameters(CFLintConfiguration configuration)  throws ConfigError {
-        if (configuration.getParameter(this,"minLength") != null) {
+    private void parseParameters(CFLintConfiguration configuration) throws ConfigError {
+        if (configuration.getParameter(this, "minLength") != null) {
             try {
-                minMethodLength = Integer.parseInt(configuration.getParameter(this,"minLength"));
+                minMethodLength = Integer.parseInt(configuration.getParameter(this, "minLength"));
             } catch (final Exception e) {
                 throw new ConfigError("Minimum length need to be an integer.");
             }
         }
 
-        if (configuration.getParameter(this,"maxLength") != null) {
+        if (configuration.getParameter(this, "maxLength") != null) {
             try {
-                maxMethodLength = Integer.parseInt(configuration.getParameter(this,"maxLength"));
+                maxMethodLength = Integer.parseInt(configuration.getParameter(this, "maxLength"));
             } catch (final Exception e) {
                 throw new ConfigError("Maximum length need to be an integer.");
             }
         }
 
-        if (configuration.getParameter(this,"maxWords") != null) {
+        if (configuration.getParameter(this, "maxWords") != null) {
             try {
-                maxMethodWords = Integer.parseInt(configuration.getParameter(this,"maxWords"));
+                maxMethodWords = Integer.parseInt(configuration.getParameter(this, "maxWords"));
             } catch (final Exception e) {
                 throw new ConfigError("Maximum no of words need to be an integer.");
             }
@@ -96,14 +93,11 @@ public class MethodNameChecker extends CFLintScannerAdapter {
     /**
      * Check if an function name is "bad" is some way.
      *
-     * Bad argument name include:
-     * - Invalid names (contains an invalid character, ends in a number, not camelCase or does not use underscores)
-     * - Names all in upper case
-     * - Names that are too short
-     * - Names that are too long
-     * - Names that are too wordy
-     * - Names that look like temporary variables
-     * - Names having a prefix or postfix
+     * Bad argument name include: - Invalid names (contains an invalid character,
+     * ends in a number, not camelCase or does not use underscores) - Names all in
+     * upper case - Names that are too short - Names that are too long - Names that
+     * are too wordy - Names that look like temporary variables - Names having a
+     * prefix or postfix
      */
     public void checkNameForBugs(final Context context, final int line, final int offset) {
         final String method = context.getFunctionName();
@@ -116,7 +110,7 @@ public class MethodNameChecker extends CFLintScannerAdapter {
 
         final ValidName name = new ValidName(minMethodLength, maxMethodLength, maxMethodWords);
 
-        if (name.isInvalid(method,context.getConfiguration().getParameter(this, "case"))) {
+        if (name.isInvalid(method, context.getConfiguration().getParameter(this, "case"))) {
             context.addMessage("METHOD_INVALID_NAME", null, line, offset);
         }
         if (name.isUpperCase(method)) {

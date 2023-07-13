@@ -25,12 +25,12 @@ public class VarScoper extends CFLintScannerAdapter {
     public static final String STRUCTNAME = "structname";
 
     private final Map<String, List<String>> checkElementAttributes = new HashMap<>();
-    private final List<String> checkNames = Arrays.asList(CF.CFQUERY, CF.CFFEED, CF.CFDIRECTORY,
-        CF.CFFORM, CF.CFFTP, CF.CFOBJECT, CF.CFSEARCH, CF.CFPROCRESULT, CF.CFPOP, CF.CFREGISTRY, CF.CFREPORT,
-        CF.CFDBINFO, CF.CFDOCUMENT, CF.CFCOLLECTION, CF.CFPDF, CF.CFZIP, CF.CFLDAP, CF.CFHTTP, CF.CFCHART,
-        CF.CFHTMLTOPDF, CF.CFIMAGE, CF.CFIMAP, CF.CFSHAREPOINT, CF.CFSPREADSHEET);
+    private final List<String> checkNames = Arrays.asList(CF.CFQUERY, CF.CFFEED, CF.CFDIRECTORY, CF.CFFORM, CF.CFFTP,
+            CF.CFOBJECT, CF.CFSEARCH, CF.CFPROCRESULT, CF.CFPOP, CF.CFREGISTRY, CF.CFREPORT, CF.CFDBINFO, CF.CFDOCUMENT,
+            CF.CFCOLLECTION, CF.CFPDF, CF.CFZIP, CF.CFLDAP, CF.CFHTTP, CF.CFCHART, CF.CFHTMLTOPDF, CF.CFIMAGE,
+            CF.CFIMAP, CF.CFSHAREPOINT, CF.CFSPREADSHEET);
     private final Collection<String> scopes = Arrays.asList(CF.APPLICATION, CF.CGI, CF.COOKIE, CF.FORM, CF.REQUEST,
-        CF.SERVER, CF.SESSION, CF.URL, CF.CFTHREAD);
+            CF.SERVER, CF.SESSION, CF.URL, CF.CFTHREAD);
 
     @Override
     public void expression(final CFExpression expression, final Context context, final BugList bugs) {
@@ -44,7 +44,7 @@ public class VarScoper extends CFLintScannerAdapter {
             }
             final String name = ((CFIdentifier) expression).getName();
             if (context.isInFunction() && context.isInAssignmentExpression()
-                && !context.getCallStack().checkVariable(name) && !isGlobal(name)) {
+                    && !context.getCallStack().checkVariable(name) && !isGlobal(name)) {
                 context.addMessage("MISSING_VAR", name, context.startLine(), context.offset() + expression.getOffset());
             } else if (expression instanceof CFFullVarExpression) {
                 final CFFullVarExpression fullVarExpr = (CFFullVarExpression) expression;
@@ -56,8 +56,9 @@ public class VarScoper extends CFLintScannerAdapter {
     @Override
     public void expression(final CFScriptStatement expression, final Context context, final BugList bugs) {
         if (expression instanceof CFPropertyStatement) {
-            //final CFPropertyStatement propertyStatement = (CFPropertyStatement)expression;
-            //TODO - handle properties?
+            // final CFPropertyStatement propertyStatement =
+            // (CFPropertyStatement)expression;
+            // TODO - handle properties?
         }
     }
 
@@ -89,7 +90,9 @@ public class VarScoper extends CFLintScannerAdapter {
         int offset = element.getBegin();
         if (name != null && name.trim().length() > 0 && context.isInFunction()) {
             if (checkNames.contains(name.toLowerCase())) {
-                offset = element.getAttributes().get(CF.NAME) != null ? element.getAttributes().get(CF.NAME).getValueSegment().getBegin() : offset;
+                offset = element.getAttributes().get(CF.NAME) != null
+                        ? element.getAttributes().get(CF.NAME).getValueSegment().getBegin()
+                        : offset;
                 assertVariable(element, context, bugs, element.getAttributeValue(CF.NAME), line, offset);
             }
             if (checkElementAttributes.containsKey(name.toLowerCase())) {
@@ -104,7 +107,7 @@ public class VarScoper extends CFLintScannerAdapter {
     }
 
     protected void assertVariable(final Element element, final Context context, final BugList bugs,
-                                  final String inameVar, int line, int offset) {
+            final String inameVar, int line, int offset) {
         final String nameVar = inameVar == null ? null : inameVar.split("\\.")[0].split("\\[")[0];
         if (nameVar != null && !context.getCallStack().checkVariable(nameVar) && !isGlobal(nameVar)) {
             context.addMessage("MISSING_VAR", inameVar, line, offset);

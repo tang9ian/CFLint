@@ -37,8 +37,7 @@ public class TestCFBugs_ArgsHint {
     @Test
     public void testBlankHint() throws CFLintScanException {
         final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
-                + "	<cfargument name=\"xyz\" default=\"123\"  hint=\"\">\r\n" + "</cffunction>\r\n"
-                + "</cfcomponent>";
+                + "	<cfargument name=\"xyz\" default=\"123\"  hint=\"\">\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(1, result.size());

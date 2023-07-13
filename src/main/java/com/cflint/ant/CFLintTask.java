@@ -104,9 +104,11 @@ public class CFLintTask extends Task {
                     System.out.println("Style:" + xmlStyle);
                 }
                 if ("findbugs".equalsIgnoreCase(xmlStyle)) {
-                    new XMLOutput().outputFindBugs(cflint.getBugs(), createWriter(xmlFile, StandardCharsets.UTF_8), cflint.getStats());
+                    new XMLOutput().outputFindBugs(cflint.getBugs(), createWriter(xmlFile, StandardCharsets.UTF_8),
+                            cflint.getStats());
                 } else {
-                    new DefaultCFlintResultMarshaller().output(cflint.getBugs(), createWriter(xmlFile, StandardCharsets.UTF_8),cflint.getStats());
+                    new DefaultCFlintResultMarshaller().output(cflint.getBugs(),
+                            createWriter(xmlFile, StandardCharsets.UTF_8), cflint.getStats());
                 }
             }
             if (textFile != null) {
@@ -126,7 +128,8 @@ public class CFLintTask extends Task {
                 int progress = 1;
                 final DirectoryScanner ds = fileset.getDirectoryScanner(getProject()); // 3
                 final ProgressMonitor progressMonitor = showProgress && !filesets.isEmpty()
-                        ? new ProgressMonitor(null, "CFLint", "", 1, ds.getIncludedFilesCount()) : null;
+                        ? new ProgressMonitor(null, "CFLint", "", 1, ds.getIncludedFilesCount())
+                        : null;
                 final String[] includedFiles = ds.getIncludedFiles();
                 for (final String includedFile : includedFiles) {
                     if (progressMonitor != null) {

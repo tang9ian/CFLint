@@ -19,7 +19,7 @@ public class TestCFBugs_QueryParams {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigBuilder configBuilder = new ConfigBuilder().include("QUERYPARAM_REQ","CFQUERYPARAM_REQ");
+        final ConfigBuilder configBuilder = new ConfigBuilder().include("QUERYPARAM_REQ", "CFQUERYPARAM_REQ");
         cfBugs = new CFLintAPI(configBuilder.build());
     }
 
@@ -122,53 +122,40 @@ public class TestCFBugs_QueryParams {
 
     @Test
     public void testCFScript_QueryParams_ignore_offset() throws CFLintScanException {
-        final String cfcSrc = "<cfcomponent>\n" + 
-            "	<cffunction name=\"foo\">\n" + 
-            "		<cfset var fooQry=\"\"/>\n" + 
-            "        <cfquery name=\"fooQry\" datasource=\"#arguments.siteDomain#com\" cachedwithin=\"#createTimeSpan(0,0,5,0)#\">\n" + 
-            "            SELECT\n" + 
-            "                M.firstName\n" + 
-            "                <!--- @CFLintIgnore CFQUERYPARAM_REQ --->\n" + 
-            "            FROM #application.linkedServerName#.schema.dbo.Comment C WITH (NOLOCK)\n" + 
-            "            LEFT OUTER JOIN something SM WITH (NOLOCK)\n" + 
-            "                ON C.memberID = SM.memberID\n" + 
-            "            INNER JOIN somethingelse m\n" + 
-            "                ON m.memberID = sm.memberid\n" + 
-            "            LEFT OUTER JOIN #application.linkedServerName#.schema.dbo.FooTable A WITH (NOLOCK)\n" + 
-            "                ON C.aID = A.aID\n" + 
-            "                AND C.bar = #magicVal# <!--- \n" + 
-            "                		@CFLintIgnore CFQUERYPARAM_REQ --->\n" + 
-            "            WHERE \n" + 
-            "            <!---\n" + 
-            "        @CFLintIgnore CFQUERYPARAM_REQ\n" + 
-            "        --->\n" + 
-            "                eID = #arguments.someNumber# AND\n" + 
-            "                moderated = 1\n" + 
-            "            ORDER BY\n" + 
-            "                cID\n" + 
-            "        </cfquery>\n" + 
-            "\n" + 
-            "	</cffunction>\n" + 
-            "</cfcomponent>";
+        final String cfcSrc = "<cfcomponent>\n" + "	<cffunction name=\"foo\">\n" + "		<cfset var fooQry=\"\"/>\n"
+                + "        <cfquery name=\"fooQry\" datasource=\"#arguments.siteDomain#com\" cachedwithin=\"#createTimeSpan(0,0,5,0)#\">\n"
+                + "            SELECT\n" + "                M.firstName\n"
+                + "                <!--- @CFLintIgnore CFQUERYPARAM_REQ --->\n"
+                + "            FROM #application.linkedServerName#.schema.dbo.Comment C WITH (NOLOCK)\n"
+                + "            LEFT OUTER JOIN something SM WITH (NOLOCK)\n"
+                + "                ON C.memberID = SM.memberID\n" + "            INNER JOIN somethingelse m\n"
+                + "                ON m.memberID = sm.memberid\n"
+                + "            LEFT OUTER JOIN #application.linkedServerName#.schema.dbo.FooTable A WITH (NOLOCK)\n"
+                + "                ON C.aID = A.aID\n" + "                AND C.bar = #magicVal# <!--- \n"
+                + "                		@CFLintIgnore CFQUERYPARAM_REQ --->\n" + "            WHERE \n"
+                + "            <!---\n" + "        @CFLintIgnore CFQUERYPARAM_REQ\n" + "        --->\n"
+                + "                eID = #arguments.someNumber# AND\n" + "                moderated = 1\n"
+                + "            ORDER BY\n" + "                cID\n" + "        </cfquery>\n" + "\n"
+                + "	</cffunction>\n" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(1, result.size());
         assertEquals("CFQUERYPARAM_REQ", result.get(0).getMessageCode());
         assertEquals("application.linkedServerName", result.get(0).getVariable());
         assertEquals(13, result.get(0).getLine());
-        assertEquals(575, cfcSrc.indexOf("application.linkedServerName", cfcSrc.indexOf("application.linkedServerName") +1 )); // get the non-ignored one
+        assertEquals(575,
+                cfcSrc.indexOf("application.linkedServerName", cfcSrc.indexOf("application.linkedServerName") + 1)); // get
+                                                                                                                     // the
+                                                                                                                     // non-ignored
+                                                                                                                     // one
         assertEquals(575, result.get(0).getOffset());
     }
 
     @Test
     public void testCFScript_QueryParams_queryExecute_OK() throws CFLintScanException {
-        final String cfcSrc = "component {\r\n" 
-            + "public void function getData() {\r\n"
-            + "queryExecute(\"\r\n"
-            + "   SELECT id from table where id = :id\r\n"
-            + "\",{\r\n"
-            + "   id = {cfsqltype=\"CF_SQL_INTEGER\", value=arguments.id, maxlength=10}\r\n"
-            + "});\r\n}\r\n}";
+        final String cfcSrc = "component {\r\n" + "public void function getData() {\r\n" + "queryExecute(\"\r\n"
+                + "   SELECT id from table where id = :id\r\n" + "\",{\r\n"
+                + "   id = {cfsqltype=\"CF_SQL_INTEGER\", value=arguments.id, maxlength=10}\r\n" + "});\r\n}\r\n}";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         final Map<String, List<BugInfo>> result = lintresult.getIssues();
         assertEquals(0, result.size());
@@ -176,11 +163,8 @@ public class TestCFBugs_QueryParams {
 
     @Test
     public void testCFScript_QueryParams_queryExecute_Hashes() throws CFLintScanException {
-        final String cfcSrc = "component {\r\n" 
-            + "public void function getData() {\r\n"
-            + "queryExecute(\"\r\n"
-            + "   SELECT id from table where id = #arguments.id#\r\n"
-            + "\");\r\n}\r\n}";
+        final String cfcSrc = "component {\r\n" + "public void function getData() {\r\n" + "queryExecute(\"\r\n"
+                + "   SELECT id from table where id = #arguments.id#\r\n" + "\");\r\n}\r\n}";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().get("QUERYPARAM_REQ");
         assertEquals(1, result.size());

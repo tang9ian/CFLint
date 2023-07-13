@@ -1,7 +1,7 @@
 package com.cflint.plugins.core;
 
-import com.cflint.CF;
 import com.cflint.BugList;
+import com.cflint.CF;
 import com.cflint.plugins.CFLintScannerAdapter;
 import com.cflint.plugins.Context;
 
@@ -40,7 +40,7 @@ public class TooManyArgumentsChecker extends CFLintScannerAdapter {
         // some code
         // otherwise the argument count will be off by one
         else if (!element.getName().equals(CF.COMMENT) && argumentCount > 0) {
-            checkNumberArguments(argumentCount, functionLine, functionOffset, context, bugs,null);
+            checkNumberArguments(argumentCount, functionLine, functionOffset, context, bugs, null);
             argumentCount = 0;
             functionLine = 0;
         }
@@ -48,7 +48,7 @@ public class TooManyArgumentsChecker extends CFLintScannerAdapter {
 
     protected void checkNumberArguments(final int argumentCount, final int atLine, int atOffset, final Context context,
             final BugList bugs, CFFuncDeclStatement expression) {
-        final String argumentThreshold = context.getConfiguration().getParameter(this,"maximum");
+        final String argumentThreshold = context.getConfiguration().getParameter(this, "maximum");
         int threshold = ARGUMENT_THRESHOLD;
 
         if (argumentThreshold != null) {
@@ -56,7 +56,8 @@ public class TooManyArgumentsChecker extends CFLintScannerAdapter {
         }
 
         if (argumentCount > threshold) {
-            context.addUniqueMessage("EXCESSIVE_ARGUMENTS", context.getFunctionName(), this, atLine, atOffset,expression==null?null:expression.getName());
+            context.addUniqueMessage("EXCESSIVE_ARGUMENTS", context.getFunctionName(), this, atLine, atOffset,
+                    expression == null ? null : expression.getName());
         }
     }
 

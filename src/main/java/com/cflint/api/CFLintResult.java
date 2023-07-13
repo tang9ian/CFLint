@@ -83,8 +83,8 @@ public class CFLintResult {
     public CFLintStats getStats() {
         return cflint.getStats();
     }
-    
-    public Map<String, List<BugInfo>> getIssues(){
+
+    public Map<String, List<BugInfo>> getIssues() {
         return cflint.getBugs().getBugList();
     }
 }

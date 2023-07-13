@@ -10,23 +10,29 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.apache.commons.io.IOUtils;
 
 import com.cflint.Version;
 import com.cflint.api.CFLintAPI;
 import com.cflint.api.CFLintResult;
-import com.cflint.cli.Settings;
 import com.cflint.config.CFLintConfiguration;
 import com.cflint.config.CFLintPluginInfo;
 import com.cflint.config.CFLintPluginInfo.PluginInfoRule;
 import com.cflint.config.CFLintPluginInfo.PluginInfoRule.PluginMessage;
-import com.cflint.config.CFLintPluginInfo.RuleGroup;
 import com.cflint.config.ConfigBuilder;
 import com.cflint.config.ConfigUtils;
 import com.cflint.exception.CFLintConfigurationException;
@@ -61,7 +67,7 @@ public class CFLintCLI {
     private String stdInFile = "source.cfc";
     private Boolean stdOut = false;
     private boolean strictInclude;
-	private String environmentName;
+    private String environmentName;
 
     public static void main(final String[] args) throws Exception {
         final Options commandOptions = new Options();
@@ -79,112 +85,66 @@ public class CFLintCLI {
         Option optionV = new Option(Settings.V, false, "verbose output during linting");
         Option optionVERSION = new Option(Settings.VERSION, false, "show the version number");
         Option optionVERBOSE = new Option(Settings.VERBOSE, false, "verbose output during linting");
-        Option optionSTRICT_INCLUDE = new Option(Settings.STRICT_INCLUDE, false, "Check every include and try to parse it");
+        Option optionSTRICT_INCLUDE = new Option(Settings.STRICT_INCLUDE, false,
+                "Check every include and try to parse it");
         Option optionLOGERROR = new Option(Settings.LOGERROR, false, "log parsing errors as bugs");
         Option optionE = new Option(Settings.E, false, "log parsing errors as bugs");
-        Option optionQUIET = new Option(Settings.QUIET, false, "quiet mode surpresses most linting error and commentary output");
-        Option optionQ = new Option(Settings.Q, false, "quiet mode surpresses most linting error and commentary output");
+        Option optionQUIET = new Option(Settings.QUIET, false,
+                "quiet mode surpresses most linting error and commentary output");
+        Option optionQ = new Option(Settings.Q, false,
+                "quiet mode surpresses most linting error and commentary output");
         Option optionDEBUG = new Option(Settings.DEBUG, false, "debug-level output during linting");
         Option optionD = new Option(Settings.D, false, "debug-level output during linting");
         Option optionHELP = new Option(Settings.HELP, false, DISPLAY_THIS_HELP);
         Option optionQUESTION_MARK = new Option(Settings.QUESTION_MARK, false, DISPLAY_THIS_HELP);
         Option optionH = new Option(Settings.H, false, DISPLAY_THIS_HELP);
         Option optionXML = new Option(Settings.XML, false, "output in xml format");
-        Option optionXMLFILE = new Option(Settings.XMLFILE, true, "specify the output xml file (default: cflint-results.xml)");
+        Option optionXMLFILE = new Option(Settings.XMLFILE, true,
+                "specify the output xml file (default: cflint-results.xml)");
         Option optionXMLSTYLE = new Option(Settings.XMLSTYLE, true, "cflint,findbugs");
         Option optionHTML = new Option(Settings.HTML, false, "output in html format (default)");
-        Option optionHTMLFILE = new Option(Settings.HTMLFILE, true, "specify the output html file (default: cflint-results.html)");
+        Option optionHTMLFILE = new Option(Settings.HTMLFILE, true,
+                "specify the output html file (default: cflint-results.html)");
         Option optionHTMLSTYLE = new Option(Settings.HTMLSTYLE, true, "default,plain"); // fancy,fancy-hist,summary
         Option optionJSON = new Option(Settings.JSON, false, "output in json format");
-        Option optionJSONFILE = new Option(Settings.JSONFILE, true, "specify the output json file (default: cflint-results.json)");
+        Option optionJSONFILE = new Option(Settings.JSONFILE, true,
+                "specify the output json file (default: cflint-results.json)");
         Option optionTEXT = new Option(Settings.TEXT, false, "output in plain text");
-        Option optionTEXTFILE = new Option(Settings.TEXTFILE, true, "specify the output text file (default: cflint-results.txt)");
-        Option optionEXTENSIONS = new Option(Settings.EXTENSIONS, true, "specify the extensions of the CF source files (default: .cfm,.cfc)");
+        Option optionTEXTFILE = new Option(Settings.TEXTFILE, true,
+                "specify the output text file (default: cflint-results.txt)");
+        Option optionEXTENSIONS = new Option(Settings.EXTENSIONS, true,
+                "specify the extensions of the CF source files (default: .cfm,.cfc)");
         Option optionSTDIN = new Option(Settings.STDIN, true, "use stdin for file input (default: source.cfc)");
         Option optionSTDOUT = new Option(Settings.STDOUT, false, "output to stdout only");
         Option optionLIST_RULE_GROUPS = new Option(Settings.LIST_RULE_GROUPS, false, "list rule groups");
         Option optionRULE_GROUPS = new Option(Settings.RULE_GROUPS, true, "rule groups");
 
-
         // undocumented
         Option optionCONFIGFILE = new Option(Settings.CONFIGFILE, true, "specify the location of the config file");
 
         // supported options
-        commandOptions.addOption(optionMARKDOWN)
-                        .addOption(optionRULES)
-                        .addOption(optionCONFIG)
-                        .addOption(optionINCLUDE_RULE)
-                        .addOption(optionEXCLUDE_RULE)
-                        .addOption(optionFOLDER)
-                        .addOption(optionFILE)
-                        .addOption(optionFILTER_FILE)
-                        .addOption(optionV)
-                        .addOption(optionVERSION)
-                        .addOption(optionVERBOSE)
-                        .addOption(optionSTRICT_INCLUDE)
-                        .addOption(optionLOGERROR)
-                        .addOption(optionE)
-                        .addOption(optionQUIET)
-                        .addOption(optionQ)
-                        .addOption(optionHELP)
-                        .addOption(optionQUESTION_MARK)
-                        .addOption(optionH)
-                        .addOption(optionXML)
-                        .addOption(optionXMLFILE)
-                        .addOption(optionXMLSTYLE)
-                        .addOption(optionHTML)
-                        .addOption(optionHTMLFILE)
-                        .addOption(optionHTMLSTYLE)
-                        .addOption(optionJSON)
-                        .addOption(optionJSONFILE)
-                        .addOption(optionTEXT)
-                        .addOption(optionTEXTFILE)
-                        .addOption(optionEXTENSIONS)
-                        .addOption(optionSTDIN)
-                        .addOption(optionSTDOUT)
-                        .addOption(optionLIST_RULE_GROUPS)
-                        .addOption(optionRULE_GROUPS)
-                        .addOption(optionCONFIGFILE)
-                        .addOption(optionDEBUG)
-                        .addOption(optionD);
+        commandOptions.addOption(optionMARKDOWN).addOption(optionRULES).addOption(optionCONFIG)
+                .addOption(optionINCLUDE_RULE).addOption(optionEXCLUDE_RULE).addOption(optionFOLDER)
+                .addOption(optionFILE).addOption(optionFILTER_FILE).addOption(optionV).addOption(optionVERSION)
+                .addOption(optionVERBOSE).addOption(optionSTRICT_INCLUDE).addOption(optionLOGERROR).addOption(optionE)
+                .addOption(optionQUIET).addOption(optionQ).addOption(optionHELP).addOption(optionQUESTION_MARK)
+                .addOption(optionH).addOption(optionXML).addOption(optionXMLFILE).addOption(optionXMLSTYLE)
+                .addOption(optionHTML).addOption(optionHTMLFILE).addOption(optionHTMLSTYLE).addOption(optionJSON)
+                .addOption(optionJSONFILE).addOption(optionTEXT).addOption(optionTEXTFILE).addOption(optionEXTENSIONS)
+                .addOption(optionSTDIN).addOption(optionSTDOUT).addOption(optionLIST_RULE_GROUPS)
+                .addOption(optionRULE_GROUPS).addOption(optionCONFIGFILE).addOption(optionDEBUG).addOption(optionD);
 
         // documented options for HelpFormatter
-        helpOptions.addOption(optionMARKDOWN)
-                        .addOption(optionRULES)
-                        .addOption(optionCONFIG)
-                        .addOption(optionINCLUDE_RULE)
-                        .addOption(optionEXCLUDE_RULE)
-                        .addOption(optionFOLDER)
-                        .addOption(optionFILE)
-                        .addOption(optionFILTER_FILE)
-                        .addOption(optionV)
-                        .addOption(optionVERSION)
-                        .addOption(optionVERBOSE)
-                        .addOption(optionSTRICT_INCLUDE)
-                        .addOption(optionLOGERROR)
-                        .addOption(optionE)
-                        .addOption(optionQUIET)
-                        .addOption(optionQ)
-                        .addOption(optionHELP)
-                        .addOption(optionQUESTION_MARK)
-                        .addOption(optionH)
-                        .addOption(optionXML)
-                        .addOption(optionXMLFILE)
-                        .addOption(optionXMLSTYLE)
-                        .addOption(optionHTML)
-                        .addOption(optionHTMLFILE)
-                        .addOption(optionHTMLSTYLE)
-                        .addOption(optionJSON)
-                        .addOption(optionJSONFILE)
-                        .addOption(optionTEXT)
-                        .addOption(optionTEXTFILE)
-                        .addOption(optionEXTENSIONS)
-                        .addOption(optionSTDIN)
-                        .addOption(optionSTDOUT)
-                        .addOption(optionLIST_RULE_GROUPS)
-                        .addOption(optionRULE_GROUPS)
-                        .addOption(optionDEBUG)
-                        .addOption(optionD);
+        helpOptions.addOption(optionMARKDOWN).addOption(optionRULES).addOption(optionCONFIG)
+                .addOption(optionINCLUDE_RULE).addOption(optionEXCLUDE_RULE).addOption(optionFOLDER)
+                .addOption(optionFILE).addOption(optionFILTER_FILE).addOption(optionV).addOption(optionVERSION)
+                .addOption(optionVERBOSE).addOption(optionSTRICT_INCLUDE).addOption(optionLOGERROR).addOption(optionE)
+                .addOption(optionQUIET).addOption(optionQ).addOption(optionHELP).addOption(optionQUESTION_MARK)
+                .addOption(optionH).addOption(optionXML).addOption(optionXMLFILE).addOption(optionXMLSTYLE)
+                .addOption(optionHTML).addOption(optionHTMLFILE).addOption(optionHTMLSTYLE).addOption(optionJSON)
+                .addOption(optionJSONFILE).addOption(optionTEXT).addOption(optionTEXTFILE).addOption(optionEXTENSIONS)
+                .addOption(optionSTDIN).addOption(optionSTDOUT).addOption(optionLIST_RULE_GROUPS)
+                .addOption(optionRULE_GROUPS).addOption(optionDEBUG).addOption(optionD);
 
         final CommandLineParser parser = new GnuParser();
         final CommandLine cmd = parser.parse(commandOptions, args);
@@ -225,7 +185,7 @@ public class CFLintCLI {
 
         final CFLintPluginInfo pluginInfo = ConfigUtils.loadDefaultPluginInfo();
         final ConfigBuilder configBuilder = new ConfigBuilder(pluginInfo);
-        if (cmd.hasOption(Settings.MARKDOWN)){
+        if (cmd.hasOption(Settings.MARKDOWN)) {
             final FileWriter out = new FileWriter("RULES.MD");
             CFLintDoc.generateRuleMarkDown(pluginInfo, new PrintWriter(out));
             System.out.println("Rules written to RULES.MD");
@@ -240,8 +200,8 @@ public class CFLintCLI {
                 System.err.println("Unable to load config file " + configfile + ".  " + e.getMessage());
             }
         }
-        if(cmd.hasOption(Settings.ENVIRONMENT)) {
-        	main.environmentName=cmd.getOptionValue(Settings.ENVIRONMENT);
+        if (cmd.hasOption(Settings.ENVIRONMENT)) {
+            main.environmentName = cmd.getOptionValue(Settings.ENVIRONMENT);
         }
         if (cmd.hasOption(Settings.INCLUDE_RULE)) {
             configBuilder.include(Arrays.asList(cmd.getOptionValue(Settings.INCLUDE_RULE).split(",")));
@@ -271,7 +231,8 @@ public class CFLintCLI {
         main.debug = (cmd.hasOption(Settings.D) || cmd.hasOption(Settings.DEBUG));
         if (main.debug) {
             System.out.println("Debug is enabled");
-            // Setting verbose = true and quiet = false in debug mode, regardless of settings actually being passed in.
+            // Setting verbose = true and quiet = false in debug mode, regardless of
+            // settings actually being passed in.
             main.verbose = true;
             main.quiet = false;
         }
@@ -361,7 +322,8 @@ public class CFLintCLI {
                 api.setExtensions(Arrays.asList(extensions.trim().split(",")));
             } catch (final Exception e) {
                 if (!quiet) {
-                    System.err.println("Unable to use extensions (" + extensions + "), using default instead. " + e.getMessage());
+                    System.err.println(
+                            "Unable to use extensions (" + extensions + "), using default instead. " + e.getMessage());
                 }
             }
         }

@@ -1,7 +1,6 @@
 package com.cflint;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +19,9 @@ public class TestCFBugs_VariableNames {
 
     @Before
     public void setUp() throws Exception {
-        final ConfigBuilder configBuilder = new ConfigBuilder().include("VAR_INVALID_NAME","VAR_ALLCAPS_NAME","SCOPE_ALLCAPS_NAME","VAR_TOO_SHORT","VAR_TOO_LONG","VAR_TOO_WORDY","VAR_IS_TEMPORARY","VAR_HAS_PREFIX_OR_POSTFIX");
+        final ConfigBuilder configBuilder = new ConfigBuilder().include("VAR_INVALID_NAME", "VAR_ALLCAPS_NAME",
+                "SCOPE_ALLCAPS_NAME", "VAR_TOO_SHORT", "VAR_TOO_LONG", "VAR_TOO_WORDY", "VAR_IS_TEMPORARY",
+                "VAR_HAS_PREFIX_OR_POSTFIX");
         cfBugs = new CFLintAPI(configBuilder.build());
     }
 
@@ -41,9 +42,9 @@ public class TestCFBugs_VariableNames {
     public void testUpercaseNameTag() throws CFLintScanException {
         final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
                 + "	<cfset var FIRSTNAME = \"Fred\">\r\n" + "	<cfset LAST_NAME = \"Smith\">\r\n"
-                + "	<cfset names = {}>\r\n" + "	<cfset name.FIRST = \"Fred\">\r\n"
-                + "	<cfset NAMES[1] = \"Fred\">\r\n" + "	<cfset local.NAME = \"Fred\">\r\n"
-                + "	<cfset variables.name = \"Fred\">\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
+                + "	<cfset names = {}>\r\n" + "	<cfset name.FIRST = \"Fred\">\r\n" + "	<cfset NAMES[1] = \"Fred\">\r\n"
+                + "	<cfset local.NAME = \"Fred\">\r\n" + "	<cfset variables.name = \"Fred\">\r\n" + "</cffunction>\r\n"
+                + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(tagSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals("VAR_ALLCAPS_NAME", result.get(0).getMessageCode());
@@ -80,9 +81,9 @@ public class TestCFBugs_VariableNames {
 
     @Test
     public void nameTooShortTag() throws CFLintScanException {
-        final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
-                + "	<cfset a = \"Fred\">\r\n" + "	<cfset b = \"Smith\">\r\n" + "	<cfset last.a = \"Fred\">\r\n"
-                + "</cffunction>\r\n" + "</cfcomponent>";
+        final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n" + "	<cfset a = \"Fred\">\r\n"
+                + "	<cfset b = \"Smith\">\r\n" + "	<cfset last.a = \"Fred\">\r\n" + "</cffunction>\r\n"
+                + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(tagSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(2, result.size());
@@ -96,8 +97,7 @@ public class TestCFBugs_VariableNames {
     public void nameTooLongTag() throws CFLintScanException {
         final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
                 + "	<cfset isaveryveryverylongvariablename = \"Fred\">\r\n"
-                + "	<cfset isa.veryveryverylongvariablename = \"Fred\">\r\n" + "</cffunction>\r\n"
-                + "</cfcomponent>";
+                + "	<cfset isa.veryveryverylongvariablename = \"Fred\">\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(tagSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(2, result.size());
@@ -123,11 +123,11 @@ public class TestCFBugs_VariableNames {
 
     @Test
     public void nameIsTemporyTag() throws CFLintScanException {
-        final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
-                + "	<cfset temp = \"Fred\">\r\n" + "	<cfset name.temp = \"Fred\">\r\n"
-                + "	<cfset obj = \"Fred\">\r\n" + "	<cfset struct = \"Fred\">\r\n"
-                + "	<cfset tempName = \"Fred\">\r\n" + "	<cfset nameObj = \"Fred\">\r\n"
-                + "	<cfset nameString = \"Fred\">\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
+        final String tagSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n" + "	<cfset temp = \"Fred\">\r\n"
+                + "	<cfset name.temp = \"Fred\">\r\n" + "	<cfset obj = \"Fred\">\r\n"
+                + "	<cfset struct = \"Fred\">\r\n" + "	<cfset tempName = \"Fred\">\r\n"
+                + "	<cfset nameObj = \"Fred\">\r\n" + "	<cfset nameString = \"Fred\">\r\n" + "</cffunction>\r\n"
+                + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(tagSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().get("VAR_IS_TEMPORARY");
         assertEquals(6, result.size());
@@ -260,9 +260,8 @@ public class TestCFBugs_VariableNames {
 
     @Test
     public void nameTooWordyScript() throws CFLintScanException {
-        final String scriptSrc = "component {\r\n" + "function test() {\r\n"
-                + "	nameIsFarTooWordy = \"Fred\";\r\n" + "	nameIsOK = \"Fred\";\r\n"
-                + "	name.isAlsoFarTooWordy = \"Fred\";\r\n" + "}\r\n" + "}";
+        final String scriptSrc = "component {\r\n" + "function test() {\r\n" + "	nameIsFarTooWordy = \"Fred\";\r\n"
+                + "	nameIsOK = \"Fred\";\r\n" + "	name.isAlsoFarTooWordy = \"Fred\";\r\n" + "}\r\n" + "}";
         CFLintResult lintresult = cfBugs.scan(scriptSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(2, result.size());
@@ -307,9 +306,9 @@ public class TestCFBugs_VariableNames {
     @Test
     public void nameHasPrefixOrPostfixScript() throws CFLintScanException {
         final String scriptSrc = "component {\r\n" + "function test() {\r\n" + "	sName = \"Fred\";\r\n"
-                + "	nameSt = {first:\"Fred\"};\r\n" + "	oName = {first:\"Fred\"};\r\n"
-                + "	bOff = true;\r\n" + "	arrNames = [\"Fred\"];\r\n" + "	thisName = \"Fred\";\r\n"
-                + "	myName = \"Fred\";\r\n" + "}\r\n" + "}";
+                + "	nameSt = {first:\"Fred\"};\r\n" + "	oName = {first:\"Fred\"};\r\n" + "	bOff = true;\r\n"
+                + "	arrNames = [\"Fred\"];\r\n" + "	thisName = \"Fred\";\r\n" + "	myName = \"Fred\";\r\n" + "}\r\n"
+                + "}";
         CFLintResult lintresult = cfBugs.scan(scriptSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(7, result.size());

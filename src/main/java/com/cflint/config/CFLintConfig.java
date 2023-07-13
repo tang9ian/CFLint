@@ -21,23 +21,23 @@ public class CFLintConfig extends BaseConfig {
     private List<CFLintPluginInfo.PluginInfoRule> rules = new ArrayList<>();
     private List<PluginMessage> excludes = new ArrayList<>();
     private List<PluginMessage> includes = new ArrayList<>();
-    private HashMap<String,Object> parameters = new HashMap<>();
+    private HashMap<String, Object> parameters = new HashMap<>();
 
     private boolean inheritParent = true;
-    
-    public HashMap<String,Object> getParameters() {
+
+    public HashMap<String, Object> getParameters() {
         return parameters;
     }
 
     @JsonAnyGetter
     @XmlElement(name = "parameters")
-    public void setParameters(final HashMap<String,Object> parameters) {
+    public void setParameters(final HashMap<String, Object> parameters) {
         this.parameters = parameters;
     }
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.cflint.config.CFLintConfiguration#getRules()
      */
     @Override
@@ -52,7 +52,7 @@ public class CFLintConfig extends BaseConfig {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.cflint.config.CFLintConfiguration#getExcludes()
      */
     public List<PluginMessage> getExcludes() {
@@ -66,7 +66,7 @@ public class CFLintConfig extends BaseConfig {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.cflint.config.CFLintConfiguration#getIncludes()
      */
     public List<PluginMessage> getIncludes() {
@@ -169,7 +169,7 @@ public class CFLintConfig extends BaseConfig {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.cflint.config.CFLintConfiguration#includes(com.cflint.config.
      * CFLintPluginInfo.PluginInfoRule.PluginMessage)
      */
@@ -180,7 +180,7 @@ public class CFLintConfig extends BaseConfig {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.cflint.config.CFLintConfiguration#excludes(com.cflint.config.
      * CFLintPluginInfo.PluginInfoRule.PluginMessage)
      */
@@ -191,9 +191,8 @@ public class CFLintConfig extends BaseConfig {
 
     /*
      * (non-Javadoc)
-     * 
-     * @see
-     * com.cflint.config.CFLintConfiguration#getRuleByClass(java.lang.Class)
+     *
+     * @see com.cflint.config.CFLintConfiguration#getRuleByClass(java.lang.Class)
      */
     @Override
     public PluginInfoRule getRuleByClass(final Class<?> clazz) {
@@ -208,7 +207,7 @@ public class CFLintConfig extends BaseConfig {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * com.cflint.config.CFLintConfiguration#getRuleForPlugin(com.cflint.plugins
      * .CFLintScanner)
@@ -242,7 +241,7 @@ public class CFLintConfig extends BaseConfig {
 
     @Override
     public Object getParameter(String name) {
-        if(parameters!=null && name !=null && parameters.containsKey(name)){
+        if (parameters != null && name != null && parameters.containsKey(name)) {
             return parameters.get(name);
         }
         return null;

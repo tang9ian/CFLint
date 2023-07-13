@@ -9,9 +9,9 @@ import com.cflint.api.CFLintAPI;
 import com.cflint.api.CFLintResult;
 import com.cflint.config.CFLintConfig;
 import com.cflint.config.CFLintPluginInfo;
-import com.cflint.config.ConfigBuilder;
 import com.cflint.config.CFLintPluginInfo.PluginInfoRule;
 import com.cflint.config.CFLintPluginInfo.PluginInfoRule.PluginMessage;
+import com.cflint.config.ConfigBuilder;
 import com.cflint.exception.CFLintScanException;
 
 public class TestCFCustomTagChecker {
@@ -20,7 +20,7 @@ public class TestCFCustomTagChecker {
 
     @Before
     public void setUp() throws Exception {
-        
+
         final CFLintConfig conf = new CFLintConfig();
         final PluginInfoRule pluginRuleX = new PluginInfoRule();
         pluginRuleX.setName("CFXTagChecker");
@@ -31,7 +31,7 @@ public class TestCFCustomTagChecker {
                 "Avoid Leaving <${tagName}> tags in committed code. Debug information should be ommited from release code");
         pluginRuleX.getMessages().add(pluginMessageX);
         pluginRuleX.addParameter("tagName", ".*:cfcustomtag");
-        
+
         CFLintPluginInfo pluginInfo = new CFLintPluginInfo();
         pluginInfo.getRules().add(pluginRuleX);
         pluginRuleX.setClassName("CFXTagChecker");

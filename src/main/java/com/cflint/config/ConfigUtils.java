@@ -30,7 +30,7 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
 public class ConfigUtils {
 
-	private static final String PLUGIN_PACKAGE = "com.cflint.plugins.core";
+    private static final String PLUGIN_PACKAGE = "com.cflint.plugins.core";
 
     private static final Logger log = LoggerFactory.getLogger(ConfigUtils.class);
     private static JAXBContext CFLintConfigContext = null;
@@ -87,22 +87,24 @@ public class ConfigUtils {
     public static <E> E unmarshal(final InputStream inputStream, final Class<E> expectedClass) throws JAXBException {
         return (E) createUnmarshaller().unmarshal(new InputStreamReader(inputStream));
     }
-    
+
     @SuppressWarnings("unchecked")
     @Deprecated
-    public static <E> E unmarshal(final File xmlFile, final Class<E> expectedClass) throws JAXBException, FileNotFoundException {
-        System.err.println("XML configurations will be removed in the next release.  Convert " + xmlFile.getName() + " to json.");
+    public static <E> E unmarshal(final File xmlFile, final Class<E> expectedClass)
+            throws JAXBException, FileNotFoundException {
+        System.err.println(
+                "XML configurations will be removed in the next release.  Convert " + xmlFile.getName() + " to json.");
         return (E) createUnmarshaller().unmarshal(new InputStreamReader(new FileInputStream(xmlFile)));
     }
-    
+
     @Deprecated
     public static Object unmarshal(final File xmlFile) throws JAXBException, FileNotFoundException {
-        System.err.println("XML configurations will be removed in the next release.  Convert " + xmlFile.getName() + " to json.");
+        System.err.println(
+                "XML configurations will be removed in the next release.  Convert " + xmlFile.getName() + " to json.");
         return createUnmarshaller().unmarshal(new InputStreamReader(new FileInputStream(xmlFile)));
     }
 
-    public static String marshalJson(final Object obj)
-            throws IOException {
+    public static String marshalJson(final Object obj) throws IOException {
         final StringWriter sw = new StringWriter();
         final ObjectMapper objectMapper = new ObjectMapper();
         final JaxbAnnotationModule module = new JaxbAnnotationModule();
@@ -112,8 +114,7 @@ public class ConfigUtils {
         return sw.toString();
     }
 
-    public static <E> E unmarshalJson(final InputStream inputStream, final Class<E> expectedClass)
-            throws IOException {
+    public static <E> E unmarshalJson(final InputStream inputStream, final Class<E> expectedClass) throws IOException {
         final ObjectMapper objectMapper = new ObjectMapper();
         final JaxbAnnotationModule module = new JaxbAnnotationModule();
         objectMapper.registerModule(module);
@@ -123,13 +124,11 @@ public class ConfigUtils {
         return objectMapper.readValue(inputStream, expectedClass);
     }
 
-    public static <E> E unmarshalJson(final String input, final Class<E> expectedClass)
-            throws IOException {
+    public static <E> E unmarshalJson(final String input, final Class<E> expectedClass) throws IOException {
         return unmarshalJson(new StringReader(input), expectedClass);
     }
 
-    public static <E> E unmarshalJson(final Reader reader, final Class<E> expectedClass)
-            throws IOException {
+    public static <E> E unmarshalJson(final Reader reader, final Class<E> expectedClass) throws IOException {
         final ObjectMapper objectMapper = new ObjectMapper();
         final JaxbAnnotationModule module = new JaxbAnnotationModule();
         objectMapper.registerModule(module);
@@ -137,8 +136,8 @@ public class ConfigUtils {
     }
 
     /**
-     * Load the plugin definitions. If it is available use the json definition
-     * file first.
+     * Load the plugin definitions. If it is available use the json definition file
+     * first.
      *
      * @return CFLintPluginInfo instance of plugin definitions
      */
@@ -190,7 +189,8 @@ public class ConfigUtils {
 
     public static CFLintScanner loadPlugin(final PluginInfoRule ruleInfo) {
         final String shortClassName = ruleInfo.getClassName() != null && ruleInfo.getClassName().trim().length() > 0
-                ? ruleInfo.getClassName() : ruleInfo.getName();
+                ? ruleInfo.getClassName()
+                : ruleInfo.getName();
         final String className = PLUGIN_PACKAGE + "." + shortClassName.trim();
         try {
             final Class<?> pluginClass = Class.forName(className);

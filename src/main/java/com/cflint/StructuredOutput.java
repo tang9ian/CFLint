@@ -17,20 +17,17 @@ public class StructuredOutput {
      * Returns true if previous bug and current bug are grouped.
      */
     public boolean isGrouped(final BugInfo prevbugInfo, final BugInfo bugInfo) {
-        if (prevbugInfo == null || bugInfo == null) {
-            return false;
-        }
+
         // Different message types are not grouped
-        if (!safeEquals(prevbugInfo.getMessageCode(), bugInfo.getMessageCode())) {
-            return false;
-        }
         // Different files are not grouped
-        if (!safeEquals(prevbugInfo.getFilename(), bugInfo.getFilename())) {
+        if (prevbugInfo == null || bugInfo == null
+                || !safeEquals(prevbugInfo.getMessageCode(), bugInfo.getMessageCode())
+                || !safeEquals(prevbugInfo.getFilename(), bugInfo.getFilename())) {
             return false;
         }
 
         return CODE_GROUPBY_FUNCTION.contains(bugInfo.getMessageCode())
-            && safeEquals(prevbugInfo.getFunction(), bugInfo.getFunction());
+                && safeEquals(prevbugInfo.getFunction(), bugInfo.getFunction());
     }
 
     /**

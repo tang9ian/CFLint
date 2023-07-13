@@ -1,14 +1,8 @@
 package com.cflint;
 
 public enum Levels {
-    FATAL("FATAL"),
-    CRITICAL("CRITICAL"),
-    ERROR("ERROR"),
-    WARNING("WARNING"),
-    CAUTION("CAUTION"),
-    INFO("INFO"),
-    COSMETIC("COSMETIC"),
-    UNKNOWN("UNKNOWN");
+    FATAL("FATAL"), CRITICAL("CRITICAL"), ERROR("ERROR"), WARNING("WARNING"), CAUTION("CAUTION"), INFO("INFO"),
+    COSMETIC("COSMETIC"), UNKNOWN("UNKNOWN");
 
     private final String severity;
 

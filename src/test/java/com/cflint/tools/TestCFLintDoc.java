@@ -13,7 +13,7 @@ public class TestCFLintDoc {
 
     @Test
     @Ignore
-    public void test(){
+    public void test() {
         final CFLintPluginInfo pluginInfo = ConfigUtils.loadDefaultPluginInfo();
         StringWriter out = new StringWriter();
         PrintWriter print = new PrintWriter(out);

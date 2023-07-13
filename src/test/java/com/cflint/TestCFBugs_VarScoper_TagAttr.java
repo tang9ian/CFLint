@@ -38,7 +38,7 @@ public class TestCFBugs_VarScoper_TagAttr {
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection<String[]> primeNumbers() {
-        List<String[]> retval = new ArrayList<String[]>();
+        List<String[]> retval = new ArrayList<>();
         retval.add(new String[] { "CFExecute", "Variable" });
         retval.add(new String[] { "CFFeed", "Query" });
         retval.add(new String[] { "CFFile", "Variable" });

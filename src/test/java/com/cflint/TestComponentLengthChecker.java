@@ -39,10 +39,9 @@ public class TestComponentLengthChecker {
     @Test
     public void testBadFunction() throws CFLintScanException {
         final StringBuilder cfcSrc = new StringBuilder("component name=\"EventQuery\" {\r\n");
-        for(int i=0;i<505;i++){
-            cfcSrc.append("  function getSourceTemplates (required sourceTemplateNum) {\r\n" + 
-                        "    return 123;\r\n" +
-                        "  }\r\n");
+        for (int i = 0; i < 505; i++) {
+            cfcSrc.append("  function getSourceTemplates (required sourceTemplateNum) {\r\n" + "    return 123;\r\n"
+                    + "  }\r\n");
         }
         cfcSrc.append("}");
         CFLintResult lintresult = cfBugs.scan(cfcSrc.toString(), "test");
@@ -51,13 +50,12 @@ public class TestComponentLengthChecker {
         assertEquals(1, result.size());
         assertEquals("EXCESSIVE_COMPONENT_LENGTH", result.get(0).getMessageCode());
     }
+
     @Test
     public void testBadFunctionCFML() throws CFLintScanException {
         final StringBuilder cfcSrc = new StringBuilder("<cfcomponent> {\r\n");
-        for(int i=0;i<505;i++){
-            cfcSrc.append("<cffunction>\r\n" + 
-                        "    <cfreturn 123/>\r\n" +
-                        " </cffunction>\r\n");
+        for (int i = 0; i < 505; i++) {
+            cfcSrc.append("<cffunction>\r\n" + "    <cfreturn 123/>\r\n" + " </cffunction>\r\n");
         }
         cfcSrc.append("</cfcomponent>");
         CFLintResult lintresult = cfBugs.scan(cfcSrc.toString(), "test");

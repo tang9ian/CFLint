@@ -116,7 +116,8 @@ public class XMLOutput extends StructuredOutput {
     private void outputCounts(final Writer writer, final CFLintStats stats, final BugCounts counts) throws IOException {
         writer.append("<counts");
         writer.append(" totalfiles=\"").append(Long.toString(stats.getFileCount())).append("\"");
-        writer.append(" totallines=\"").append(stats.getTotalLines().toString()).append("\">").append(System.getProperty(LINE_SEPARATOR));
+        writer.append(" totallines=\"").append(stats.getTotalLines().toString()).append("\">")
+                .append(System.getProperty(LINE_SEPARATOR));
 
         for (final String code : counts.bugTypes()) {
             writer.append("<count");
@@ -149,11 +150,13 @@ public class XMLOutput extends StructuredOutput {
         // 1. Instantiate a TransformerFactory.
         final javax.xml.transform.TransformerFactory tFactory = javax.xml.transform.TransformerFactory.newInstance();
 
-        // 2. Use the TransformerFactory to process the stylesheet Source and generate a Transformer.
+        // 2. Use the TransformerFactory to process the stylesheet Source and generate a
+        // Transformer.
         final InputStream is = getClass().getResourceAsStream("/findbugs/cflint-to-findbugs.xsl");
         final javax.xml.transform.Transformer transformer = tFactory.newTransformer(new StreamSource(is));
 
-        // 3. Use the Transformer to transform an XML Source and send the output to a Result object.
+        // 3. Use the Transformer to transform an XML Source and send the output to a
+        // Result object.
         transformer.transform(new StreamSource(new StringReader(sw.toString())), new StreamResult(writer));
 
         writer.close();

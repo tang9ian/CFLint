@@ -52,8 +52,8 @@ public class TestCFBugs_GLobalVarChecker {
 
     @Test
     public void testCGI() throws CFLintScanException {
-        final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n"
-                + "	<cfset CGI.bf=\"123\">\r\n" + "</cffunction>\r\n" + "</cfcomponent>";
+        final String cfcSrc = "<cfcomponent>\r\n" + "<cffunction name=\"test\">\r\n" + "	<cfset CGI.bf=\"123\">\r\n"
+                + "</cffunction>\r\n" + "</cfcomponent>";
         CFLintResult lintresult = cfBugs.scan(cfcSrc, "test");
         final List<BugInfo> result = lintresult.getIssues().values().iterator().next();
         assertEquals(1, result.size());

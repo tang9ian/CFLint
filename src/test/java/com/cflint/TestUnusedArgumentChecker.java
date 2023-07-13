@@ -173,11 +173,11 @@ public class TestUnusedArgumentChecker {
         assertEquals(3, result.size());
         assertEquals("UNUSED_METHOD_ARGUMENT", result.get(0).getMessageCode());
         assertEquals("b", result.get(0).getVariable());
-        assertEquals(tagSrc.indexOf("\"b\"")+1, result.get(0).getOffset());
+        assertEquals(tagSrc.indexOf("\"b\"") + 1, result.get(0).getOffset());
         assertEquals(4, result.get(0).getLine());
         assertEquals("UNUSED_METHOD_ARGUMENT", result.get(1).getMessageCode());
         assertEquals("c", result.get(1).getVariable());
-        assertEquals(tagSrc.indexOf("\"c\"")+1, result.get(1).getOffset());
+        assertEquals(tagSrc.indexOf("\"c\"") + 1, result.get(1).getOffset());
         assertEquals(5, result.get(1).getLine());
         assertEquals("UNUSED_METHOD_ARGUMENT", result.get(2).getMessageCode());
         assertEquals(6, result.get(2).getLine());
