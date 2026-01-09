@@ -18,17 +18,30 @@ import cfml.parsing.cfscript.script.CFPropertyStatement;
 import cfml.parsing.cfscript.script.CFScriptStatement;
 import net.htmlparser.jericho.Element;
 
+/**
+ * Checker for variable scoping issues.
+ * <p>
+ * This scanner checks if variables are properly scoped in CFML/CFScript.
+ * It identifies variables that are used without a scope prefix (e.g., "myVar" instead of "arguments.myVar" or "local.myVar")
+ * inside functions, which can lead to race conditions or unintended global variable access.
+ * </p>
+ */
 public class VarScoper extends CFLintScannerAdapter {
 
     public static final String VARIABLE = "variable";
     public static final String RESULT = "result";
     public static final String STRUCTNAME = "structname";
 
+    // Mapping of tags to attributes that define variable names
     private final Map<String, List<String>> checkElementAttributes = new HashMap<>();
+    
+    // List of tags that often define variables
     private final List<String> checkNames = Arrays.asList(CF.CFQUERY, CF.CFFEED, CF.CFDIRECTORY, CF.CFFORM, CF.CFFTP,
             CF.CFOBJECT, CF.CFSEARCH, CF.CFPROCRESULT, CF.CFPOP, CF.CFREGISTRY, CF.CFREPORT, CF.CFDBINFO, CF.CFDOCUMENT,
             CF.CFCOLLECTION, CF.CFPDF, CF.CFZIP, CF.CFLDAP, CF.CFHTTP, CF.CFCHART, CF.CFHTMLTOPDF, CF.CFIMAGE,
             CF.CFIMAP, CF.CFSHAREPOINT, CF.CFSPREADSHEET);
+            
+    // Known scopes in ColdFusion
     private final Collection<String> scopes = Arrays.asList(CF.APPLICATION, CF.CGI, CF.COOKIE, CF.FORM, CF.REQUEST,
             CF.SERVER, CF.SESSION, CF.URL, CF.CFTHREAD);
 

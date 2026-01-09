@@ -40,6 +40,13 @@ import com.cflint.exception.CFLintScanException;
 import com.cflint.tools.CFLintDoc;
 import com.cflint.xml.MarshallerException;
 
+/**
+ * Command Line Interface for CFLint.
+ * <p>
+ * This class handles parsing command line arguments, configuring CFLint,
+ * and executing the linting process from the terminal.
+ * </p>
+ */
 public class CFLintCLI {
     private static final String CFLINT = "cflint";
     private static final String CFLINT_USAGE = "java -jar CFLint-" + Version.getVersion() + "-all.jar";

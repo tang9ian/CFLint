@@ -2,6 +2,13 @@ package com.cflint;
 
 import java.math.BigInteger;
 
+/**
+ * Statistics for a CFLint execution.
+ * <p>
+ * Tracks metrics such as the total number of files scanned, total lines of code,
+ * and the counts of bugs found (grouped by severity/code).
+ * </p>
+ */
 public class CFLintStats {
 
     // Epoch timestamp for XML format output

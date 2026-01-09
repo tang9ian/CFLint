@@ -8,6 +8,13 @@ import java.util.Map;
 
 import com.cflint.tools.CFLintFilter;
 
+/**
+ * A collection of bugs found during the linting process.
+ * <p>
+ * Stores bugs grouped by their message code and provides filtering capabilities
+ * to include or exclude specific issues based on configuration.
+ * </p>
+ */
 public class BugList implements Iterable<BugInfo> {
 
     private Map<String, List<BugInfo>> bugs = new HashMap<>();

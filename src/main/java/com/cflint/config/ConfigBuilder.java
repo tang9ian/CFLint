@@ -8,6 +8,13 @@ import java.util.List;
 import com.cflint.config.CFLintPluginInfo.PluginInfoRule.PluginMessage;
 import com.cflint.config.CFLintPluginInfo.RuleGroup;
 
+/**
+ * Builder class for creating CFLint configurations.
+ * <p>
+ * Allows for fluent construction of configuration objects by combining
+ * default rules, rule groups, and custom overrides.
+ * </p>
+ */
 public class ConfigBuilder {
 
     private final CFLintPluginInfo pluginInfo;

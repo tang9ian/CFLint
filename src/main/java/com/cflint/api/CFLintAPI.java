@@ -23,9 +23,15 @@ import com.cflint.exception.CFLintScanException;
 import com.cflint.tools.CFLintFilter;
 
 /**
- * Provides a public API for integrating CFLint directly into another JVM
- * environment.
- *
+ * Provides a public API for integrating CFLint directly into another JVM environment.
+ * <p>
+ * This class serves as a facade for the CFLint functionality, allowing external applications
+ * (like IDE plugins, CI/CD tools, etc.) to configure and run CFLint programmatically.
+ * </p>
+ * <p>
+ * It handles the creation of the {@link CFLint} instance, application of configuration,
+ * and execution of scans on files, folders, or source strings.
+ * </p>
  */
 public class CFLintAPI {
 
@@ -50,16 +56,35 @@ public class CFLintAPI {
     final CFLintConfiguration configuration;
     final CFLint cflint;
 
+    /**
+     * Constructs a CFLintAPI with a specific configuration.
+     *
+     * @param configuration The configuration to use.
+     * @throws CFLintConfigurationException If configuration initialization fails.
+     */
     public CFLintAPI(final CFLintConfiguration configuration) throws CFLintConfigurationException {
         super();
         this.configuration = configuration;
         this.cflint = createCFLintInstance();
     }
 
+    /**
+     * Constructs a CFLintAPI with the default configuration.
+     *
+     * @throws CFLintConfigurationException If configuration initialization fails.
+     */
     public CFLintAPI() throws CFLintConfigurationException {
         this(new ConfigBuilder().build());
     }
 
+    /**
+     * Scans a list of files or folders.
+     *
+     * @param fileOrFolder List of file or folder paths to scan.
+     * @return The result of the linting process.
+     * @throws CFLintScanException          If an error occurs during scanning.
+     * @throws CFLintConfigurationException If an error occurs during configuration.
+     */
     public CFLintResult scan(final List<String> fileOrFolder) throws CFLintScanException, CFLintConfigurationException {
 
         for (final String scanfolder : fileOrFolder) {

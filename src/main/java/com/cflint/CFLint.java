@@ -98,6 +98,17 @@ import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.EndTag;
 import net.htmlparser.jericho.Source;
 
+/**
+ * CFLint Main Class.
+ * <p>
+ * This class is the core engine of CFLint. It coordinates the configuration,
+ * parsing, scanning, and error reporting processes.
+ * </p>
+ * <p>
+ * It maintains the state of the current linting session, including the configuration,
+ * the list of bugs found, and the statistics.
+ * </p>
+ */
 public class CFLint implements IErrorReporter {
 
     // constants
@@ -135,6 +146,12 @@ public class CFLint implements IErrorReporter {
     private final Stack<File> includeFileStack = new Stack<>();
     private int[] lineOffsets;
 
+    /**
+     * Constructs a new CFLint instance with the given configuration.
+     *
+     * @param configFile The configuration object to use.
+     * @throws IOException If there is an issue creating the filter or loading resources.
+     */
     public CFLint(final CFLintConfiguration configFile) throws IOException {
         final CFLintFilter filter = CFLintFilter.createFilter(verbose);
         bugs = new BugList(filter);
@@ -146,6 +163,16 @@ public class CFLint implements IErrorReporter {
         }
     }
 
+    /**
+     * Updates the configuration of this CFLint instance.
+     * <p>
+     * This method clears existing extensions, allowed extensions, and listeners,
+     * and reloads them based on the new configuration.
+     * </p>
+     *
+     * @param configFile The new configuration to apply.
+     * @throws IOException If there is an issue loading plugins or resources.
+     */
     public void setConfiguration(final CFLintConfiguration configFile) throws IOException {
         configuration = configFile == null ? new CFLintConfig() : configFile;
         extensions.clear();

@@ -14,6 +14,13 @@ import com.cflint.plugins.CFLintScanner;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Concrete implementation of CFLint configuration.
+ * <p>
+ * Represents the configuration loaded from XML or JSON files, or defined programmatically.
+ * It holds the list of rules, exclusions, inclusions, and global parameters.
+ * </p>
+ */
 @XmlRootElement(name = "config")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CFLintConfig extends BaseConfig {

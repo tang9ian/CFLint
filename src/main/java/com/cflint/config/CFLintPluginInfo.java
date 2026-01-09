@@ -17,6 +17,13 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+/**
+ * Represents the plugin information structure.
+ * <p>
+ * This class maps to the definition of plugins, rules, and rule groups
+ * often loaded from XML/JSON resources.
+ * </p>
+ */
 @XmlRootElement(name = "CFLint-Plugin")
 @JsonInclude(Include.NON_NULL)
 public class CFLintPluginInfo {

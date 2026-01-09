@@ -9,6 +9,13 @@ import cfml.parsing.cfscript.CFExpression;
 import cfml.parsing.cfscript.script.CFScriptStatement;
 import net.htmlparser.jericho.Element;
 
+/**
+ * Represents a single bug or issue found during analysis.
+ * <p>
+ * Contains details such as the filename, line number, error message,
+ * severity code, and the specific expression or element where the issue occurred.
+ * </p>
+ */
 public class BugInfo implements Comparable<BugInfo> {
 
     private String filename;
